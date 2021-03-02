@@ -1,28 +1,30 @@
 version: '3.1'
-
-db:
-  image: mariadb:10.3
-  container_name: mariadb_asio
-  restart: unless-stopped
-  ports:
-    #      - "3306:3306"
-    - "3307:3306"
-  volumes:
-    - mysql-data2:/var/lib/mysql
-    - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
-  command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-  environment:
-    # MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
-    MYSQL_ROOT_USER: root
-    MYSQL_ROOT_PASSWORD: 1z3rt1s
-    # CONFIG - Change the default values below (should match values passed to wikibase)
-    MYSQL_DATABASE: 'services'
-    MYSQL_USER: 'app'
-    MYSQL_PASSWORD: 'sqlpass'
-  networks:
-    default:
-      aliases:
-        - mysql.svc
+services:
+  db:
+    image: mariadb:10.3
+    container_name: mariadb_asio
+    restart: unless-stopped
+    ports:
+      #      - "3306:3306"
+      - "3307:3306"
+    volumes:
+      - mysql-data2:/var/lib/mysql
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    environment:
+      # MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: 1z3rt1s
+      # CONFIG - Change the default values below (should match values passed to wikibase)
+      MYSQL_DATABASE: 'services'
+      MYSQL_USER: 'app'
+      MYSQL_PASSWORD: 'sqlpass'
+    networks:
+      default:
+        aliases:
+          - mysql.svc
+volumes:
+  mysql-data2:
 #  solr:
 #    image: solr:7.7
 #    ports:
@@ -36,5 +38,4 @@ db:
 #      - start
 #      - -c
 #      - -f
-volumes:
-  pgdata:
+

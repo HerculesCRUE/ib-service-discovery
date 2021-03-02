@@ -34,6 +34,7 @@ public class ServiceServiceImp implements ServiceService {
         return repository.findByName(name).orElse(new ArrayList<>());
     }
 
+
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public void delete(ServiceEnt entity) {

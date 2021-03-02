@@ -1,6 +1,7 @@
 package es.um.asio.service.model.service.discovery;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.Nullable;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(
@@ -44,13 +46,11 @@ public class ServiceEnt {
     @ApiModelProperty(	example="http://localhost",allowEmptyValue = false, position =2, value = "Required: The URL where the service is available", required = true)
     private String baseURL;
 
-    @Column(name = Columns.PORT,columnDefinition = "INT",updatable = true, nullable = false)
-    @Min(1)
-    @Max(65535)
-    @ApiModelProperty(	example="8080",allowEmptyValue = false, position =3, value = "Required: The port where the service is available", required = true)
-    private int port;
+    @Column(name = Columns.PORT,columnDefinition = "INT",updatable = true, nullable = true)
+    @ApiModelProperty(	example="8080",allowEmptyValue = false, position =3, value = "Optional: The port where the service is available", required = false)
+    private Integer port;
 
-    @Column(name = Columns.HEALTH_ENDPOINT,columnDefinition = "NVARCHAR(200)",updatable = true, nullable = false)
+    @Column(name = Columns.HEALTH_ENDPOINT,columnDefinition = "NVARCHAR(200)",updatable = true, nullable = true)
     @ApiModelProperty(	example="http://localhost",allowEmptyValue = false, position =3, value = "Required: The PATH where the service is available", required = true)
     private String healthEndpoint;
 
@@ -74,7 +74,7 @@ public class ServiceEnt {
     @ApiModelProperty( allowEmptyValue = true ,position =5, readOnly=false, value = "Optional: Set of request to check service status", required = false)
     private List<HealthRequest> healthRequests;
 
-    public ServiceEnt(NodeEnt node,String name, String baseURL, @Min(1) @Max(65535) int port, String healthEndpoint) {
+    public ServiceEnt(NodeEnt node, String name, String baseURL,Integer port, String healthEndpoint) {
         this.name = name;
         this.baseURL = baseURL;
         this.port = port;
@@ -90,13 +90,15 @@ public class ServiceEnt {
         if (this.baseURL!=null) {
             sb.append(this.baseURL.endsWith("/") ? this.baseURL.substring(0, this.baseURL.length() - 1) : this.baseURL);
         }
-        if (this.port>0) {
+        if (this.port!=null) {
             sb.append(String.format(":%d",this.port));
         }
         return new URL(sb.toString());
     }
 
     public URL buildHealthURL() throws MalformedURLException {
+        if (healthEndpoint == null)
+            return null;
         StringBuffer sb = new StringBuffer();
         sb.append(buildBaseURL());
         if (this.healthEndpoint!=null) {
@@ -110,6 +112,10 @@ public class ServiceEnt {
         this.port = other.port;
         this.healthEndpoint = other.healthEndpoint;
         this.status = other.status;
+    }
+
+    public List<TypeEnt> filterTypeByName(String name) {
+        return this.types.stream().filter(te -> te.getName().equals(name)).collect(Collectors.toList());
     }
 
     /**

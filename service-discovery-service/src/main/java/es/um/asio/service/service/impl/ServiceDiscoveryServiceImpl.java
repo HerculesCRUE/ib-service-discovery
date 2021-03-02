@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ServiceDiscoveryServiceImpl implements ServiceDiscoveryService {
@@ -87,8 +84,9 @@ public class ServiceDiscoveryServiceImpl implements ServiceDiscoveryService {
         Map<Long,NodeEnt> nodes = new HashMap<>();
         List<ServiceEnt> services = serviceService.getServiceByName(serviceName);
         if (services!=null) {
-            for (ServiceEnt service :services) {
-                for (TypeEnt typeEnt : service.getTypes()) {
+            for (ServiceEnt service :services) { // Servicio
+                service.setTypes(new HashSet<>(service.filterTypeByName(typeName)));
+                for (TypeEnt typeEnt : service.filterTypeByName(typeName)) { // Type
                     if (typeEnt.getName().equals(typeName)) {
                         NodeEnt node;
                         if (nodes.get(typeEnt.getService().getNodeEnt().getId()) == null) { // Si no estaba en el map
