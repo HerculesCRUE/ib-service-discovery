@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TypeServiceImp.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Archetype - Java JPA Rest API - Back</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.service.impl</a> &gt; <span class="el_source">TypeServiceImp.java</span></div><h1>TypeServiceImp.java</h1><pre class="source lang-java linenums">package es.um.asio.service.service.impl;
+
+import es.um.asio.audit.abstractions.exception.NoSuchEntityException;
+import es.um.asio.service.filter.TypeFilter;
+import es.um.asio.service.model.service.discovery.TypeEnt;
+import es.um.asio.service.repository.TypeRepository;
+import es.um.asio.service.service.TypeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="nc" id="L19">public class TypeServiceImp implements TypeService {</span>
+
+    @Autowired
+    TypeRepository repository;
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public List&lt;TypeEnt&gt; getAllNodes() {
+<span class="nc" id="L27">        return repository.findAll();</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public TypeEnt getNodeByName(String name) {
+<span class="nc" id="L33">        return repository.findByName(name).orElse(null);</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public void delete(TypeEnt entity) {
+<span class="nc" id="L39">        repository.delete(entity);</span>
+<span class="nc" id="L40">    }</span>
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public void delete(String identifier) {
+<span class="nc" id="L45">        repository.deleteById(identifier);</span>
+<span class="nc" id="L46">    }</span>
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public Optional&lt;TypeEnt&gt; find(String identifier) {
+<span class="nc" id="L51">        return repository.findById(identifier);</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public Page&lt;TypeEnt&gt; findPaginated(TypeFilter filter, Pageable pageable) {
+<span class="nc" id="L57">        return repository.findAll(filter, pageable);</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public List&lt;TypeEnt&gt; findAll() {
+<span class="nc" id="L63">        return repository.findAll();</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public TypeEnt save(TypeEnt entity) {
+<span class="nc" id="L69">        return repository.save(entity);</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public List&lt;TypeEnt&gt; save(Iterable&lt;TypeEnt&gt; entities) {
+<span class="nc" id="L75">        return repository.saveAll(entities);</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public TypeEnt update(TypeEnt entity) throws NoSuchEntityException {
+<span class="nc" id="L81">        return repository.save(entity);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

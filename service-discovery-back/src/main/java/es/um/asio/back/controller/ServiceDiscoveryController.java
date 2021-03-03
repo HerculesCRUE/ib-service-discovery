@@ -28,12 +28,12 @@ public class ServiceDiscoveryController {
             @RequestParam(required = true) @Validated(Create.class) final String serviceName,
             @ApiParam(name = "host", value = "Service host", required = true)
             @RequestParam(required = true) @Validated(Create.class) final String host,
-            @ApiParam(name = "port", value = "Service port", required = true)
-            @RequestParam(required = true) @Validated(Create.class) final String port,
+            @ApiParam(name = "port", value = "Service port", required = false)
+            @RequestParam(required = false) @Validated(Create.class) final String port,
             @ApiParam(name = "healthEndpoint", value = "Health end point", required = false)
-            @RequestParam(required = true) @Validated(Create.class) final String healthEndpoint
+            @RequestParam(required = false) @Validated(Create.class) final String healthEndpoint
     ) {
-        return service.addService(nodeName,serviceName,host,Integer.valueOf(port),healthEndpoint);
+        return service.addService(nodeName,serviceName,host,(port!=null)?Integer.valueOf(port):null,healthEndpoint);
     }
 
     @PostMapping(Mappings.TYPE)

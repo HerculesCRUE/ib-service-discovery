@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Role.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Archetype - Java JPA Rest API - Back</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.model</a> &gt; <span class="el_source">Role.java</span></div><h1>Role.java</h1><pre class="source lang-java linenums">package es.um.asio.service.model;
+
+import com.google.common.base.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.io.Serializable;
+
+<span class="nc" id="L10">@Getter</span>
+<span class="nc" id="L11">@AllArgsConstructor</span>
+public enum Role {
+    /**
+     * Defines administrator users.
+     */
+<span class="nc" id="L16">    ADMINISTRATOR(new AdministratorAuthority()),</span>
+    /**
+     * Defines normal users.
+     */
+<span class="nc" id="L20">    USER(new UserAuthority()),</span>
+    /**
+     * Defines anonymous users.
+     */
+<span class="nc" id="L24">    ANONYMOUS(new AnonymousAuthority());</span>
+
+    /**
+     * Granted authority.
+     */
+    private final GrantedAuthority grantedAuthority;
+
+    /**
+     * Gets the authority.
+     *
+     * @return the authority
+     */
+    public GrantedAuthority getGrantedAuthority() {
+<span class="nc" id="L37">        return this.grantedAuthority;</span>
+    }
+
+    /**
+     * Administrator role.
+     */
+    public static final String ADMINISTRATOR_ROLE = &quot;ROLE_ADMINISTRATOR&quot;;
+
+    /**
+     * Normal user role.
+     */
+    public static final String USER_ROLE = &quot;ROLE_USER&quot;;
+
+    /**
+     * Anonymous role.
+     */
+    public static final String ANONYMOUS_ROLE = &quot;ROLE_ANONYMOUS&quot;;
+
+    /**
+     * Administrator authority.
+     */
+<span class="nc" id="L58">    public static final class AdministratorAuthority implements GrantedAuthority, Serializable {</span>
+
+        /**
+         * Version ID.
+         */
+        private static final long serialVersionUID = -2025230374849824612L;
+
+        /*
+         * (non-Javadoc)
+         * @see org.springframework.security.core.GrantedAuthority#getAuthority()
+         */
+        @Override
+        public String getAuthority() {
+<span class="nc" id="L71">            return ADMINISTRATOR_ROLE;</span>
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see java.lang.Object#hashCode()
+         */
+        @Override
+        public int hashCode() {
+<span class="nc" id="L80">            return Objects.hashCode(AdministratorAuthority.class);</span>
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see java.lang.Object#equals(java.lang.Object)
+         */
+        @Override
+        public boolean equals(final Object obj) {
+
+<span class="nc" id="L90">            boolean equals = false;</span>
+
+<span class="nc bnc" id="L92" title="All 4 branches missed.">            if ((this == obj) || (obj instanceof AdministratorAuthority)) {</span>
+<span class="nc" id="L93">                equals = true;</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            } else if (obj instanceof GrantedAuthority) {</span>
+<span class="nc" id="L95">                equals = this.getAuthority().equals(((GrantedAuthority) obj).getAuthority());</span>
+            }
+
+<span class="nc" id="L98">            return equals;</span>
+        }
+    }
+
+    /**
+     * Basic user authority.
+     */
+<span class="nc" id="L105">    public static final class UserAuthority implements GrantedAuthority, Serializable {</span>
+
+        /**
+         * Version ID.
+         */
+        private static final long serialVersionUID = 7028138804996471844L;
+
+        /*
+         * (non-Javadoc)
+         * @see org.springframework.security.core.GrantedAuthority#getAuthority()
+         */
+        @Override
+        public String getAuthority() {
+<span class="nc" id="L118">            return USER_ROLE;</span>
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see java.lang.Object#hashCode()
+         */
+        @Override
+        public int hashCode() {
+<span class="nc" id="L127">            return Objects.hashCode(UserAuthority.class);</span>
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see java.lang.Object#equals(java.lang.Object)
+         */
+        @Override
+        public boolean equals(final Object obj) {
+
+<span class="nc" id="L137">            boolean equals = false;</span>
+
+<span class="nc bnc" id="L139" title="All 4 branches missed.">            if ((this == obj) || (obj instanceof UserAuthority)) {</span>
+<span class="nc" id="L140">                equals = true;</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            } else if (obj instanceof GrantedAuthority) {</span>
+<span class="nc" id="L142">                equals = this.getAuthority().equals(((GrantedAuthority) obj).getAuthority());</span>
+            }
+
+<span class="nc" id="L145">            return equals;</span>
+        }
+    }
+
+    /**
+     * Anonymous user.
+     */
+<span class="nc" id="L152">    public static final class AnonymousAuthority implements GrantedAuthority, Serializable {</span>
+
+        /**
+         * Version ID.
+         */
+        private static final long serialVersionUID = 258847940543090710L;
+
+        /*
+         * (non-Javadoc)
+         * @see org.springframework.security.core.GrantedAuthority#getAuthority()
+         */
+        @Override
+        public String getAuthority() {
+<span class="nc" id="L165">            return ANONYMOUS_ROLE;</span>
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see java.lang.Object#hashCode()
+         */
+        @Override
+        public int hashCode() {
+<span class="nc" id="L174">            return Objects.hashCode(AnonymousAuthority.class);</span>
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see java.lang.Object#equals(java.lang.Object)
+         */
+        @Override
+        public boolean equals(final Object obj) {
+
+<span class="nc" id="L184">            boolean equals = false;</span>
+
+<span class="nc bnc" id="L186" title="All 4 branches missed.">            if ((this == obj) || (obj instanceof AnonymousAuthority)) {</span>
+<span class="nc" id="L187">                equals = true;</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">            } else if (obj instanceof GrantedAuthority) {</span>
+<span class="nc" id="L189">                equals = this.getAuthority().equals(((GrantedAuthority) obj).getAuthority());</span>
+            }
+
+<span class="nc" id="L192">            return equals;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

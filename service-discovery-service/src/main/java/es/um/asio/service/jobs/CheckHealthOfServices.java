@@ -57,17 +57,21 @@ public class CheckHealthOfServices {
             for (ServiceEnt service: node.getServices()) {
                 try {
                     URL url = service.buildHealthURL();
-                    try {
-                        AbstractMap.SimpleEntry<Integer, JsonElement> response = doRequest(url, Connection.Method.GET, null, null, null);
-                        if (response.getKey() >= 200 && response.getKey() <= 399) {
-                            service.setStatus(Status.UP);
-                            service.getHealthRequests().add(new HealthRequest(service, Status.UP));
-                        } else {
+                    if (url!=null && !url.equals("")) {
+                        try {
+                            AbstractMap.SimpleEntry<Integer, JsonElement> response = doRequest(url, Connection.Method.GET, null, null, null);
+                            if (response.getKey() >= 200 && response.getKey() <= 399) {
+                                service.setStatus(Status.UP);
+                                service.getHealthRequests().add(new HealthRequest(service, Status.UP));
+                            } else {
+                                service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));
+                            }
+                        } catch (Exception e) {
+                            service.setStatus(Status.DOWN);
                             service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));
                         }
-                    } catch (Exception e) {
-                        service.setStatus(Status.DOWN);
-                        service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));
+                    } else {
+                        service.setStatus(Status.UNKNOWN);
                     }
                     serviceService.save(service);
                 } catch (MalformedURLException e) {
@@ -88,17 +92,21 @@ public class CheckHealthOfServices {
         for (ServiceEnt service: node.getServices()) {
             try {
                 URL url = service.buildHealthURL();
-                try {
-                    AbstractMap.SimpleEntry<Integer, JsonElement> response = doRequest(url, Connection.Method.GET, null, null, null);
-                    if (response.getKey() >= 200 && response.getKey() <= 399) {
-                        service.setStatus(Status.UP);
-                        service.getHealthRequests().add(new HealthRequest(service, Status.UP));
-                    } else {
+                if (url!=null && !url.equals("")) {
+                    try {
+                        AbstractMap.SimpleEntry<Integer, JsonElement> response = doRequest(url, Connection.Method.GET, null, null, null);
+                        if (response.getKey() >= 200 && response.getKey() <= 399) {
+                            service.setStatus(Status.UP);
+                            service.getHealthRequests().add(new HealthRequest(service, Status.UP));
+                        } else {
+                            service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));
+                        }
+                    } catch (Exception e) {
+                        service.setStatus(Status.DOWN);
                         service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));
                     }
-                } catch (Exception e) {
-                    service.setStatus(Status.DOWN);
-                    service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));
+                } else {
+                    service.setStatus(Status.UNKNOWN);
                 }
                 serviceService.save(service);
             } catch (MalformedURLException e) {

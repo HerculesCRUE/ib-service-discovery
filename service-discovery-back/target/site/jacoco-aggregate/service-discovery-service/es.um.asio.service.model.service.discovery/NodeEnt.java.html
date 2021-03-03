@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>NodeEnt.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Archetype - Java JPA Rest API - Back</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.model.service.discovery</a> &gt; <span class="el_source">NodeEnt.java</span></div><h1>NodeEnt.java</h1><pre class="source lang-java linenums">package es.um.asio.service.model.service.discovery;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name= NodeEnt.TABLE)
+@Getter
+<span class="nc" id="L13">@Setter</span>
+<span class="nc bnc" id="L14" title="All 14 branches missed.">@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)</span>
+<span class="nc" id="L15">@AllArgsConstructor</span>
+public class NodeEnt {
+
+    public static final String TABLE = &quot;node&quot;;
+
+<span class="nc" id="L20">    public NodeEnt() {</span>
+<span class="nc" id="L21">        this.services = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L22">    }</span>
+
+<span class="nc" id="L24">    public NodeEnt(String name) {</span>
+<span class="nc" id="L25">        this.name = name;</span>
+<span class="nc" id="L26">        this.services = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L27">    }</span>
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = Columns.ID)
+    @ApiModelProperty(hidden = true)
+<span class="nc" id="L33">    private long id;</span>
+
+    @Column(name = Columns.NAME,columnDefinition = &quot;NVARCHAR(100)&quot;,updatable = false, nullable = false, unique = true)
+    @EqualsAndHashCode.Include
+    @ApiModelProperty(	example=&quot;um&quot;,allowEmptyValue = false, position =1, value = &quot;Required: Node name represents the highest level of the namespace. &quot;, required = true)
+<span class="nc" id="L38">    private String name;</span>
+
+    @ApiModelProperty(	example=&quot;federation&quot;, allowEmptyValue = true ,position =3, readOnly=false, value = &quot;Optional: Set of services of Node&quot;, required = false)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = &quot;nodeEnt&quot;, cascade = CascadeType.ALL)
+<span class="nc" id="L42">    private Set&lt;ServiceEnt&gt; services;</span>
+
+    public void addService(ServiceEnt serviceEnt) {
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (this.services.contains(serviceEnt)) {</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            for (ServiceEnt s : this.services) {</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">                if (s.getName().equals(serviceEnt.getName()))</span>
+<span class="nc" id="L48">                    s.merge(serviceEnt);</span>
+<span class="nc" id="L49">            }</span>
+        } else {
+<span class="nc" id="L51">            this.services.add(serviceEnt);</span>
+        }
+<span class="nc" id="L53">    }</span>
+
+    /**
+     * Column name constants.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    static final class Columns {
+        /**
+         * ID column.
+         */
+        protected static final String ID = &quot;id&quot;;
+        /**
+         * ID column.
+         */
+        protected static final String NAME = &quot;name&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
