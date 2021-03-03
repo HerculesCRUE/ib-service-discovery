@@ -11,13 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
-<span class="nc" id="L20">public class ServiceDiscoveryServiceImpl implements ServiceDiscoveryService {</span>
+<span class="nc" id="L17">public class ServiceDiscoveryServiceImpl implements ServiceDiscoveryService {</span>
 
     @Autowired
     NodeServiceImp nodeService;
@@ -35,97 +32,98 @@ import java.util.Map;
     @Override
     public NodeEnt addService(String nodeName, String serviceName, String host, Integer port, String healthEndpoint) {
 
-<span class="nc" id="L38">        NodeEnt node = nodeService.getNodeByName(nodeName);</span>
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (node==null) {</span>
-<span class="nc" id="L40">            node = new NodeEnt(nodeName);</span>
+<span class="nc" id="L35">        NodeEnt node = nodeService.getNodeByName(nodeName);</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (node==null) {</span>
+<span class="nc" id="L37">            node = new NodeEnt(nodeName);</span>
         }
-<span class="nc" id="L42">        node.addService(</span>
+<span class="nc" id="L39">        node.addService(</span>
                 new ServiceEnt(
-<span class="nc" id="L44">                        node,serviceName,host,port,healthEndpoint</span>
+                        node,serviceName,host,port,healthEndpoint
                 )
         );
-<span class="nc" id="L47">        nodeService.save(node);</span>
+<span class="nc" id="L44">        nodeService.save(node);</span>
         try {
-<span class="nc" id="L49">            checkHealthOfServices.checkHealthOfServices(node);</span>
-<span class="nc" id="L50">        } catch (Exception e) {</span>
+<span class="nc" id="L46">            checkHealthOfServices.checkHealthOfServices(node);</span>
+<span class="nc" id="L47">        } catch (Exception e) {</span>
 
-<span class="nc" id="L52">        }</span>
+<span class="nc" id="L49">        }</span>
         // checkHealthOfServices.checkHealthOfServices(node);
-<span class="nc" id="L54">        return node;</span>
+<span class="nc" id="L51">        return node;</span>
     }
 
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public NodeEnt getNode(String nodeName) {
-<span class="nc" id="L60">        return nodeService.getNodeByName(nodeName);</span>
+<span class="nc" id="L57">        return nodeService.getNodeByName(nodeName);</span>
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public List&lt;NodeEnt&gt; getServices(String serviceName) {
-<span class="nc" id="L66">        Map&lt;Long,NodeEnt&gt; nodes = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L67">        List&lt;ServiceEnt&gt; services = serviceService.getServiceByName(serviceName);</span>
-<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (services!=null) {</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">            for (ServiceEnt service :services) {</span>
+<span class="nc" id="L63">        Map&lt;Long,NodeEnt&gt; nodes = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L64">        List&lt;ServiceEnt&gt; services = serviceService.getServiceByName(serviceName);</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (services!=null) {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            for (ServiceEnt service :services) {</span>
                 NodeEnt node;
-<span class="nc bnc" id="L71" title="All 2 branches missed.">                if (nodes.get(service.getNodeEnt().getId())==null) { // Si no estaba en el map</span>
-<span class="nc" id="L72">                    node = new NodeEnt();</span>
-<span class="nc" id="L73">                    node.setId(service.getNodeEnt().getId());</span>
-<span class="nc" id="L74">                    node.setName(service.getNodeEnt().getName());</span>
-<span class="nc" id="L75">                    nodes.put(node.getId(),node);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                if (nodes.get(service.getNodeEnt().getId())==null) { // Si no estaba en el map</span>
+<span class="nc" id="L69">                    node = new NodeEnt();</span>
+<span class="nc" id="L70">                    node.setId(service.getNodeEnt().getId());</span>
+<span class="nc" id="L71">                    node.setName(service.getNodeEnt().getName());</span>
+<span class="nc" id="L72">                    nodes.put(node.getId(),node);</span>
                 } else {
-<span class="nc" id="L77">                    node = nodes.get(service.getNodeEnt().getId());</span>
+<span class="nc" id="L74">                    node = nodes.get(service.getNodeEnt().getId());</span>
                 }
-<span class="nc" id="L79">                node.addService(service);</span>
-<span class="nc" id="L80">            }</span>
+<span class="nc" id="L76">                node.addService(service);</span>
+<span class="nc" id="L77">            }</span>
         }
-<span class="nc" id="L82">        return new ArrayList&lt;&gt;(nodes.values());</span>
+<span class="nc" id="L79">        return new ArrayList&lt;&gt;(nodes.values());</span>
     }
 
     @Override
     public List&lt;NodeEnt&gt; getServices(String serviceName, String typeName) {
-<span class="nc" id="L87">        Map&lt;Long,NodeEnt&gt; nodes = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L88">        List&lt;ServiceEnt&gt; services = serviceService.getServiceByName(serviceName);</span>
-<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (services!=null) {</span>
-<span class="nc bnc" id="L90" title="All 2 branches missed.">            for (ServiceEnt service :services) {</span>
-<span class="nc bnc" id="L91" title="All 2 branches missed.">                for (TypeEnt typeEnt : service.getTypes()) {</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">                    if (typeEnt.getName().equals(typeName)) {</span>
+<span class="nc" id="L84">        Map&lt;Long,NodeEnt&gt; nodes = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L85">        List&lt;ServiceEnt&gt; services = serviceService.getServiceByName(serviceName);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (services!=null) {</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            for (ServiceEnt service :services) { // Servicio</span>
+<span class="nc" id="L88">                service.setTypes(new HashSet&lt;&gt;(service.filterTypeByName(typeName)));</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">                for (TypeEnt typeEnt : service.filterTypeByName(typeName)) { // Type</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">                    if (typeEnt.getName().equals(typeName)) {</span>
                         NodeEnt node;
-<span class="nc bnc" id="L94" title="All 2 branches missed.">                        if (nodes.get(typeEnt.getService().getNodeEnt().getId()) == null) { // Si no estaba en el map</span>
-<span class="nc" id="L95">                            node = new NodeEnt();</span>
-<span class="nc" id="L96">                            node.setId(typeEnt.getService().getNodeEnt().getId());</span>
-<span class="nc" id="L97">                            node.setName(typeEnt.getService().getNodeEnt().getName());</span>
-<span class="nc" id="L98">                            nodes.put(node.getId(), node);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                        if (nodes.get(typeEnt.getService().getNodeEnt().getId()) == null) { // Si no estaba en el map</span>
+<span class="nc" id="L93">                            node = new NodeEnt();</span>
+<span class="nc" id="L94">                            node.setId(typeEnt.getService().getNodeEnt().getId());</span>
+<span class="nc" id="L95">                            node.setName(typeEnt.getService().getNodeEnt().getName());</span>
+<span class="nc" id="L96">                            nodes.put(node.getId(), node);</span>
                         } else {
-<span class="nc" id="L100">                            node = nodes.get(service.getNodeEnt().getId());</span>
+<span class="nc" id="L98">                            node = nodes.get(service.getNodeEnt().getId());</span>
                         }
-<span class="nc" id="L102">                        node.addService(service);</span>
+<span class="nc" id="L100">                        node.addService(service);</span>
                     }
-<span class="nc" id="L104">                }</span>
-<span class="nc" id="L105">            }</span>
+<span class="nc" id="L102">                }</span>
+<span class="nc" id="L103">            }</span>
         }
-<span class="nc" id="L107">        return new ArrayList&lt;&gt;(nodes.values());</span>
+<span class="nc" id="L105">        return new ArrayList&lt;&gt;(nodes.values());</span>
     }
 
     @Override
     public NodeEnt addType(String nodeName, String serviceName, String typeName, String suffixURL) {
-<span class="nc" id="L112">        NodeEnt nodeEnt = nodeService.getNodeByName(nodeName);</span>
-<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (nodeEnt!=null) {</span>
-<span class="nc bnc" id="L114" title="All 2 branches missed.">            for (ServiceEnt service : nodeEnt.getServices()) {</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">                if (service.getName().equals(serviceName)) {</span>
-<span class="nc" id="L116">                    TypeEnt type = new TypeEnt(service,typeName,suffixURL);</span>
-<span class="nc" id="L117">                    service.getTypes().add(type);</span>
+<span class="nc" id="L110">        NodeEnt nodeEnt = nodeService.getNodeByName(nodeName);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (nodeEnt!=null) {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            for (ServiceEnt service : nodeEnt.getServices()) {</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                if (service.getName().equals(serviceName)) {</span>
+<span class="nc" id="L114">                    TypeEnt type = new TypeEnt(service,typeName,suffixURL);</span>
+<span class="nc" id="L115">                    service.getTypes().add(type);</span>
                 }
-<span class="nc" id="L119">            }</span>
+<span class="nc" id="L117">            }</span>
         }
-<span class="nc" id="L121">        nodeService.save(nodeEnt);</span>
-<span class="nc" id="L122">        return nodeEnt;</span>
+<span class="nc" id="L119">        nodeService.save(nodeEnt);</span>
+<span class="nc" id="L120">        return nodeEnt;</span>
     }
 
     @Override
     public List&lt;NodeEnt&gt; getAllNodes() {
-<span class="nc" id="L127">        List&lt;NodeEnt&gt; nodes = nodeService.findAll();</span>
-<span class="nc" id="L128">        return nodes;</span>
+<span class="nc" id="L125">        List&lt;NodeEnt&gt; nodes = nodeService.findAll();</span>
+<span class="nc" id="L126">        return nodes;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -29,7 +29,7 @@
 		</dependency>
 
 		<!-- Module dependencies -->
-		<dependency>
+<!--		<dependency>
 			<groupId>es.um.asio</groupId>
 			<artifactId>service-discovery-jpa-abstractions</artifactId>
 			<version>2.0.0</version>
@@ -39,7 +39,7 @@
 			<groupId>es.um.asio</groupId>
 			<artifactId>service-discovery-service-abstractions</artifactId>
 			<version>2.0.0</version>
-		</dependency>
+		</dependency>-->
 
 		<!-- Izertis dependencies -->
 
@@ -158,15 +158,27 @@
 			<artifactId>jackson-annotations</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.izertis.libraries</groupId>
-			<artifactId>izertis-solr-library</artifactId>
-			<version>1.1.4</version>
+			<groupId>es.um.asio</groupId>
+			<artifactId>service-discovery-jpa-abstractions</artifactId>
+			<version>2.0.0</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.izertis.libraries</groupId>
-			<artifactId>izertis-solr-autoconfigure</artifactId>
-			<version>1.1.4</version>
+			<groupId>es.um.asio</groupId>
+			<artifactId>service-discovery-service-abstractions</artifactId>
+			<version>2.0.0</version>
+			<scope>compile</scope>
 		</dependency>
+		<!--		<dependency>
+                    <groupId>com.izertis.libraries</groupId>
+                    <artifactId>izertis-solr-library</artifactId>
+                    <version>1.1.4</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.izertis.libraries</groupId>
+                    <artifactId>izertis-solr-autoconfigure</artifactId>
+                    <version>1.1.4</version>
+                </dependency>-->
 	</dependencies>
 
 </project>

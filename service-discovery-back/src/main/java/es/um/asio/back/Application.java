@@ -1,6 +1,5 @@
 package es.um.asio.back;
 
-import es.um.asio.back.solr.SolrBackConfig;
 import es.um.asio.service.ServiceConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@Import({ ServiceConfig.class, SolrBackConfig.class })
+@Import({ ServiceConfig.class})
 @ComponentScan(excludeFilters = { @ComponentScan.Filter(type = FilterType.ASPECTJ, pattern = "*..solr..*") })
 @EnableScheduling
 public class Application {

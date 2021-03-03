@@ -34,52 +34,53 @@ import java.util.Optional;
 <span class="nc" id="L34">        return repository.findByName(name).orElse(new ArrayList&lt;&gt;());</span>
     }
 
+
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public void delete(ServiceEnt entity) {
-<span class="nc" id="L40">        repository.delete(entity);</span>
-<span class="nc" id="L41">    }</span>
+<span class="nc" id="L41">        repository.delete(entity);</span>
+<span class="nc" id="L42">    }</span>
 
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public void delete(String identifier) {
-<span class="nc" id="L46">        repository.deleteById(identifier);</span>
-<span class="nc" id="L47">    }</span>
+<span class="nc" id="L47">        repository.deleteById(identifier);</span>
+<span class="nc" id="L48">    }</span>
 
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public Optional&lt;ServiceEnt&gt; find(String identifier) {
-<span class="nc" id="L52">        return repository.findById(identifier);</span>
+<span class="nc" id="L53">        return repository.findById(identifier);</span>
     }
 
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public Page&lt;ServiceEnt&gt; findPaginated(ServiceFilter filter, Pageable pageable) {
-<span class="nc" id="L58">        return repository.findAll(filter, pageable);</span>
+<span class="nc" id="L59">        return repository.findAll(filter, pageable);</span>
     }
 
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public List&lt;ServiceEnt&gt; findAll() {
-<span class="nc" id="L64">        return repository.findAll();</span>
+<span class="nc" id="L65">        return repository.findAll();</span>
     }
 
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public ServiceEnt save(ServiceEnt entity) {
-<span class="nc" id="L70">        return repository.save(entity);</span>
+<span class="nc" id="L71">        return repository.save(entity);</span>
     }
 
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public List&lt;ServiceEnt&gt; save(Iterable&lt;ServiceEnt&gt; entities) {
-<span class="nc" id="L76">        return repository.saveAll(entities);</span>
+<span class="nc" id="L77">        return repository.saveAll(entities);</span>
     }
 
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public ServiceEnt update(ServiceEnt entity) throws NoSuchEntityException {
-<span class="nc" id="L82">        return repository.save(entity);</span>
+<span class="nc" id="L83">        return repository.save(entity);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,7 +1,6 @@
 package es.um.asio.service;
 
 import es.um.asio.service.repository.RepositoryConfig;
-import es.um.asio.service.solr.SolrConfig;
 import org.springframework.context.annotation.*;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @ComponentScan(excludeFilters = { @ComponentScan.Filter(type = FilterType.ASPECTJ, pattern = "*..solr..*") })
-@Import({RepositoryConfig.class, SolrConfig.class})
+@Import({RepositoryConfig.class})
 public class ServiceConfig {
 
     /**

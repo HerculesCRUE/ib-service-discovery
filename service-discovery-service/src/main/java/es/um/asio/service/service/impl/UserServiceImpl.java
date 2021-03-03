@@ -1,14 +1,9 @@
 package es.um.asio.service.service.impl;
 
-import com.izertis.libraries.solr.annotation.Indexable;
-import com.izertis.libraries.solr.annotation.IndexableClass;
 import es.um.asio.service.filter.UserFilter;
 import es.um.asio.service.model.User;
 import es.um.asio.service.repository.UserRepository;
 import es.um.asio.service.service.UserService;
-import es.um.asio.service.solr.mapper.UserSolrMapper;
-import es.um.asio.service.solr.model.UserSolr;
-import es.um.asio.service.solr.repository.UserSolrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -26,7 +21,7 @@ import java.util.Optional;
 /**
  * Service implementation to handle {@link User} entity related operations
  */
-@IndexableClass
+
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -37,11 +32,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    /**
-     * Spring Data Solr repository for {@link UserSolr}
-     */
-    @Autowired(required = false)
-    private UserSolrRepository userSolrRepository;
 
     /**
      * Solr enabled
@@ -49,16 +39,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Value("${app.solr.enabled:#{false}}")
     private boolean solrEnabled;
 
-    /**
-     * MapStruct Mapper for {@link UserSolr}.
-     */
-    @Autowired(required = false)
-    private UserSolrMapper userSolrMapper;
 
     /**
      * {@inheritDoc}
      */
-    @Indexable(User.class)
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public User save(final User entity) {
@@ -68,7 +53,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     /**
      * {@inheritDoc}
      */
-    @Indexable(User.class)
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public List<User> save(final Iterable<User> entities) {
@@ -78,7 +63,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     /**
      * {@inheritDoc}
      */
-    @Indexable(User.class)
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public User update(final User entity) {
@@ -88,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     /**
      * {@inheritDoc}
      */
-    @Indexable(User.class)
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public void delete(final User entity) {
@@ -98,7 +83,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     /**
      * {@inheritDoc}
      */
-    @Indexable(User.class)
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public void delete(final String identifier) {
@@ -108,7 +93,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     /**
      * {@inheritDoc}
      */
-    @Indexable(User.class)
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public void undelete(final String identifier) {
@@ -130,12 +115,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public Page<User> findPaginated(final UserFilter filter, final Pageable pageable) {
         Page<User> page;
 
-        if (this.solrEnabled) {
-            page = this.userSolrMapper.convertFromSolr(this.userSolrRepository.findAll(filter, pageable));
-        } else {
-            page = this.userRepository.findAll(filter, pageable);
-        }
-
+        page = this.userRepository.findAll(filter, pageable);
         return page;
     }
 

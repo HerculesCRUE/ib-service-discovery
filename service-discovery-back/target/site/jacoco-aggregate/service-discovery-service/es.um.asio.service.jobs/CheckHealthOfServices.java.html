@@ -57,111 +57,119 @@ import java.text.SimpleDateFormat;
 <span class="nc bnc" id="L57" title="All 2 branches missed.">            for (ServiceEnt service: node.getServices()) {</span>
                 try {
 <span class="nc" id="L59">                    URL url = service.buildHealthURL();</span>
-                    try {
-<span class="nc" id="L61">                        AbstractMap.SimpleEntry&lt;Integer, JsonElement&gt; response = doRequest(url, Connection.Method.GET, null, null, null);</span>
-<span class="nc bnc" id="L62" title="All 4 branches missed.">                        if (response.getKey() &gt;= 200 &amp;&amp; response.getKey() &lt;= 399) {</span>
-<span class="nc" id="L63">                            service.setStatus(Status.UP);</span>
-<span class="nc" id="L64">                            service.getHealthRequests().add(new HealthRequest(service, Status.UP));</span>
-                        } else {
-<span class="nc" id="L66">                            service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
-                        }
-<span class="nc" id="L68">                    } catch (Exception e) {</span>
-<span class="nc" id="L69">                        service.setStatus(Status.DOWN);</span>
-<span class="nc" id="L70">                        service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
-<span class="nc" id="L71">                    }</span>
-<span class="nc" id="L72">                    serviceService.save(service);</span>
-<span class="nc" id="L73">                } catch (MalformedURLException e) {</span>
-<span class="nc" id="L74">                    e.printStackTrace();</span>
-<span class="nc" id="L75">                    service.setStatus(Status.UNKNOWN);</span>
-<span class="nc" id="L76">                    service.getHealthRequests().add(new HealthRequest(service, Status.UNKNOWN));</span>
-<span class="nc" id="L77">                }</span>
-<span class="nc" id="L78">                log.info(&quot;Node: {},\tService: {},\tStatus: {}&quot;,node.getName(),service.getName(),service.getStatus());</span>
-<span class="nc" id="L79">            }</span>
-<span class="nc" id="L80">        }</span>
-<span class="nc" id="L81">    }</span>
+<span class="nc bnc" id="L60" title="All 4 branches missed.">                    if (url!=null &amp;&amp; !url.equals(&quot;&quot;)) {</span>
+                        try {
+<span class="nc" id="L62">                            AbstractMap.SimpleEntry&lt;Integer, JsonElement&gt; response = doRequest(url, Connection.Method.GET, null, null, null);</span>
+<span class="nc bnc" id="L63" title="All 4 branches missed.">                            if (response.getKey() &gt;= 200 &amp;&amp; response.getKey() &lt;= 399) {</span>
+<span class="nc" id="L64">                                service.setStatus(Status.UP);</span>
+<span class="nc" id="L65">                                service.getHealthRequests().add(new HealthRequest(service, Status.UP));</span>
+                            } else {
+<span class="nc" id="L67">                                service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
+                            }
+<span class="nc" id="L69">                        } catch (Exception e) {</span>
+<span class="nc" id="L70">                            service.setStatus(Status.DOWN);</span>
+<span class="nc" id="L71">                            service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
+<span class="nc" id="L72">                        }</span>
+                    } else {
+<span class="nc" id="L74">                        service.setStatus(Status.UNKNOWN);</span>
+                    }
+<span class="nc" id="L76">                    serviceService.save(service);</span>
+<span class="nc" id="L77">                } catch (MalformedURLException e) {</span>
+<span class="nc" id="L78">                    e.printStackTrace();</span>
+<span class="nc" id="L79">                    service.setStatus(Status.UNKNOWN);</span>
+<span class="nc" id="L80">                    service.getHealthRequests().add(new HealthRequest(service, Status.UNKNOWN));</span>
+<span class="nc" id="L81">                }</span>
+<span class="nc" id="L82">                log.info(&quot;Node: {},\tService: {},\tStatus: {}&quot;,node.getName(),service.getName(),service.getStatus());</span>
+<span class="nc" id="L83">            }</span>
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">    }</span>
 
     public void checkHealthOfServices(NodeEnt node) {
-<span class="nc" id="L84">        Calendar c = Calendar.getInstance();</span>
-<span class="nc" id="L85">        c.setTime(new Date());</span>
-<span class="nc" id="L86">        c.add(Calendar.DATE,-7);</span>
-<span class="nc" id="L87">        healthRequestService.deleteOldHealthRequest(c.getTime());</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">        for (ServiceEnt service: node.getServices()) {</span>
+<span class="nc" id="L88">        Calendar c = Calendar.getInstance();</span>
+<span class="nc" id="L89">        c.setTime(new Date());</span>
+<span class="nc" id="L90">        c.add(Calendar.DATE,-7);</span>
+<span class="nc" id="L91">        healthRequestService.deleteOldHealthRequest(c.getTime());</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        for (ServiceEnt service: node.getServices()) {</span>
             try {
-<span class="nc" id="L90">                URL url = service.buildHealthURL();</span>
-                try {
-<span class="nc" id="L92">                    AbstractMap.SimpleEntry&lt;Integer, JsonElement&gt; response = doRequest(url, Connection.Method.GET, null, null, null);</span>
-<span class="nc bnc" id="L93" title="All 4 branches missed.">                    if (response.getKey() &gt;= 200 &amp;&amp; response.getKey() &lt;= 399) {</span>
-<span class="nc" id="L94">                        service.setStatus(Status.UP);</span>
-<span class="nc" id="L95">                        service.getHealthRequests().add(new HealthRequest(service, Status.UP));</span>
-                    } else {
-<span class="nc" id="L97">                        service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
-                    }
-<span class="nc" id="L99">                } catch (Exception e) {</span>
-<span class="nc" id="L100">                    service.setStatus(Status.DOWN);</span>
-<span class="nc" id="L101">                    service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
-<span class="nc" id="L102">                }</span>
-<span class="nc" id="L103">                serviceService.save(service);</span>
-<span class="nc" id="L104">            } catch (MalformedURLException e) {</span>
-<span class="nc" id="L105">                e.printStackTrace();</span>
-<span class="nc" id="L106">                service.setStatus(Status.UNKNOWN);</span>
-<span class="nc" id="L107">                service.getHealthRequests().add(new HealthRequest(service, Status.UNKNOWN));</span>
-<span class="nc" id="L108">            }</span>
-<span class="nc" id="L109">            log.info(&quot;Node: {},	Service: {},	Status: {}&quot;,node.getName(),service.getName(),service.getStatus());</span>
-<span class="nc" id="L110">        }</span>
-<span class="nc" id="L111">    }</span>
+<span class="nc" id="L94">                URL url = service.buildHealthURL();</span>
+<span class="nc bnc" id="L95" title="All 4 branches missed.">                if (url!=null &amp;&amp; !url.equals(&quot;&quot;)) {</span>
+                    try {
+<span class="nc" id="L97">                        AbstractMap.SimpleEntry&lt;Integer, JsonElement&gt; response = doRequest(url, Connection.Method.GET, null, null, null);</span>
+<span class="nc bnc" id="L98" title="All 4 branches missed.">                        if (response.getKey() &gt;= 200 &amp;&amp; response.getKey() &lt;= 399) {</span>
+<span class="nc" id="L99">                            service.setStatus(Status.UP);</span>
+<span class="nc" id="L100">                            service.getHealthRequests().add(new HealthRequest(service, Status.UP));</span>
+                        } else {
+<span class="nc" id="L102">                            service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
+                        }
+<span class="nc" id="L104">                    } catch (Exception e) {</span>
+<span class="nc" id="L105">                        service.setStatus(Status.DOWN);</span>
+<span class="nc" id="L106">                        service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
+<span class="nc" id="L107">                    }</span>
+                } else {
+<span class="nc" id="L109">                    service.setStatus(Status.UNKNOWN);</span>
+                }
+<span class="nc" id="L111">                serviceService.save(service);</span>
+<span class="nc" id="L112">            } catch (MalformedURLException e) {</span>
+<span class="nc" id="L113">                e.printStackTrace();</span>
+<span class="nc" id="L114">                service.setStatus(Status.UNKNOWN);</span>
+<span class="nc" id="L115">                service.getHealthRequests().add(new HealthRequest(service, Status.UNKNOWN));</span>
+<span class="nc" id="L116">            }</span>
+<span class="nc" id="L117">            log.info(&quot;Node: {},	Service: {},	Status: {}&quot;,node.getName(),service.getName(),service.getStatus());</span>
+<span class="nc" id="L118">        }</span>
+<span class="nc" id="L119">    }</span>
 
     private AbstractMap.SimpleEntry&lt;Integer,JsonElement&gt; doRequest(URL url, Connection.Method method, Map&lt;String,String&gt; headers, Map&lt;String,String&gt; params, Map&lt;String,String&gt; queryParams) throws IOException {
-<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (queryParams!=null) {</span>
-<span class="nc" id="L115">            url = buildQueryParams(url,queryParams);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (queryParams!=null) {</span>
+<span class="nc" id="L123">            url = buildQueryParams(url,queryParams);</span>
         }
-<span class="nc" id="L117">        HttpURLConnection con = (HttpURLConnection) url.openConnection();</span>
-<span class="nc" id="L118">        con.setRequestMethod(method.toString());</span>
-<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (headers!=null) {</span>
-<span class="nc bnc" id="L120" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; headerEntry : headers.entrySet()) {</span>
-<span class="nc" id="L121">                con.setRequestProperty(headerEntry.getKey(),headerEntry.getValue());</span>
-<span class="nc" id="L122">            }</span>
+<span class="nc" id="L125">        HttpURLConnection con = (HttpURLConnection) url.openConnection();</span>
+<span class="nc" id="L126">        con.setRequestMethod(method.toString());</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (headers!=null) {</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; headerEntry : headers.entrySet()) {</span>
+<span class="nc" id="L129">                con.setRequestProperty(headerEntry.getKey(),headerEntry.getValue());</span>
+<span class="nc" id="L130">            }</span>
         }
-<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (params!=null) {</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; paramEntry : params.entrySet()) {</span>
-<span class="nc" id="L126">                con.setRequestProperty(paramEntry.getKey(),paramEntry.getValue());</span>
-<span class="nc" id="L127">            }</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (params!=null) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; paramEntry : params.entrySet()) {</span>
+<span class="nc" id="L134">                con.setRequestProperty(paramEntry.getKey(),paramEntry.getValue());</span>
+<span class="nc" id="L135">            }</span>
         }
-<span class="nc" id="L129">        con.setDoOutput(true);</span>
-<span class="nc" id="L130">        con.connect();</span>
-<span class="nc" id="L131">        int code = con.getResponseCode();</span>
+<span class="nc" id="L137">        con.setDoOutput(true);</span>
+<span class="nc" id="L138">        con.connect();</span>
+<span class="nc" id="L139">        int code = con.getResponseCode();</span>
         StringBuilder response;
-<span class="nc" id="L133">        try(BufferedReader br = new BufferedReader(</span>
-<span class="nc" id="L134">                new InputStreamReader(con.getInputStream(), &quot;utf-8&quot;))) {</span>
-<span class="nc" id="L135">            response = new StringBuilder();</span>
+<span class="nc" id="L141">        try(BufferedReader br = new BufferedReader(</span>
+<span class="nc" id="L142">                new InputStreamReader(con.getInputStream(), &quot;utf-8&quot;))) {</span>
+<span class="nc" id="L143">            response = new StringBuilder();</span>
             String responseLine;
-<span class="nc bnc" id="L137" title="All 2 branches missed.">            while ((responseLine = br.readLine()) != null) {</span>
-<span class="nc" id="L138">                response.append(responseLine.trim());</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            while ((responseLine = br.readLine()) != null) {</span>
+<span class="nc" id="L146">                response.append(responseLine.trim());</span>
             }
         }
-<span class="nc" id="L141">        con.disconnect();</span>
+<span class="nc" id="L149">        con.disconnect();</span>
         JsonElement jResponse;
         try {
-<span class="nc" id="L144">            jResponse = new Gson().fromJson(response.toString(), JsonElement.class);</span>
-<span class="nc" id="L145">        } catch (Exception e) {</span>
-<span class="nc" id="L146">            jResponse = new JsonObject();</span>
-<span class="nc" id="L147">        }</span>
-<span class="nc" id="L148">        return new AbstractMap.SimpleEntry&lt;Integer,JsonElement&gt;(code, jResponse) {</span>
+<span class="nc" id="L152">            jResponse = new Gson().fromJson(response.toString(), JsonElement.class);</span>
+<span class="nc" id="L153">        } catch (Exception e) {</span>
+<span class="nc" id="L154">            jResponse = new JsonObject();</span>
+<span class="nc" id="L155">        }</span>
+<span class="nc" id="L156">        return new AbstractMap.SimpleEntry&lt;Integer,JsonElement&gt;(code, jResponse) {</span>
         };
 
     }
 
     private URL buildQueryParams(URL baseURL, Map&lt;String,String&gt; queryParams) throws MalformedURLException, UnsupportedEncodingException {
-<span class="nc" id="L154">        StringBuffer base = new StringBuffer();</span>
-<span class="nc" id="L155">        base.append(baseURL.toString());</span>
-<span class="nc bnc" id="L156" title="All 4 branches missed.">        if (queryParams!=null &amp;&amp; queryParams.size()&gt;0) {</span>
-<span class="nc" id="L157">            base.append(&quot;?&quot;);</span>
-<span class="nc" id="L158">            List&lt;String&gt; qpList = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L159" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; qpEntry : queryParams.entrySet()) {</span>
-<span class="nc" id="L160">                qpList.add(qpEntry.getKey()+&quot;=&quot;+ URLEncoder.encode(qpEntry.getValue(), StandardCharsets.UTF_8.toString()));</span>
-<span class="nc" id="L161">            }</span>
-<span class="nc" id="L162">            base.append(String.join(&quot;&amp;&quot;,qpList));</span>
+<span class="nc" id="L162">        StringBuffer base = new StringBuffer();</span>
+<span class="nc" id="L163">        base.append(baseURL.toString());</span>
+<span class="nc bnc" id="L164" title="All 4 branches missed.">        if (queryParams!=null &amp;&amp; queryParams.size()&gt;0) {</span>
+<span class="nc" id="L165">            base.append(&quot;?&quot;);</span>
+<span class="nc" id="L166">            List&lt;String&gt; qpList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; qpEntry : queryParams.entrySet()) {</span>
+<span class="nc" id="L168">                qpList.add(qpEntry.getKey()+&quot;=&quot;+ URLEncoder.encode(qpEntry.getValue(), StandardCharsets.UTF_8.toString()));</span>
+<span class="nc" id="L169">            }</span>
+<span class="nc" id="L170">            base.append(String.join(&quot;&amp;&quot;,qpList));</span>
         }
-<span class="nc" id="L164">        return new URL(base.toString());</span>
+<span class="nc" id="L172">        return new URL(base.toString());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
