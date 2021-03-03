@@ -46,6 +46,7 @@
       <module name="service-discovery-jpa-abstractions" target="11" />
       <module name="service-discovery-service" target="11" />
       <module name="service-discovery-service-abstractions" target="11" />
+      <module name="service-discovery-test" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

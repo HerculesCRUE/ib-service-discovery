@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/service-discovery-jpa-abstractions/service-discovery-jpa-abstractions.iml" filepath="$PROJECT_DIR$/service-discovery-jpa-abstractions/service-discovery-jpa-abstractions.iml" />
       <module fileurl="file://$PROJECT_DIR$/service-discovery-service/service-discovery-service.iml" filepath="$PROJECT_DIR$/service-discovery-service/service-discovery-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/service-discovery-service-abstractions/service-discovery-service-abstractions.iml" filepath="$PROJECT_DIR$/service-discovery-service-abstractions/service-discovery-service-abstractions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service-discovery-test/service-discovery-test.iml" filepath="$PROJECT_DIR$/service-discovery-test/service-discovery-test.iml" />
     </modules>
   </component>
 </project>
