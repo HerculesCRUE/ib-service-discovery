@@ -31,15 +31,12 @@ import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
 public class UserProxyTest {
-    /**
-     * User proxy
-     */
+
+
     @Autowired
     private UserProxy proxy;
 
-    /**
-     * User service mock bean.
-     */
+
     @MockBean
     private UserService service;
 
