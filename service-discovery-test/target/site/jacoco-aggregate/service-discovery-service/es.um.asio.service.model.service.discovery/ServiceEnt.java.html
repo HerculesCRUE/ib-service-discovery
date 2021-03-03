@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ServiceEnt.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">UM - ASIO - service-discovery-test</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.model.service.discovery</a> &gt; <span class="el_source">ServiceEnt.java</span></div><h1>ServiceEnt.java</h1><pre class="source lang-java linenums">package es.um.asio.service.model.service.discovery;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.Nullable;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
+
+
+import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Entity
+@Table(
+        name = ServiceEnt.TABLE,
+        uniqueConstraints = @UniqueConstraint(columnNames = {&quot;name&quot;,&quot;node_id&quot;})
+)
+@Getter
+<span class="nc" id="L27">@Setter</span>
+<span class="nc bnc" id="L28" title="All 22 branches missed.">@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)</span>
+<span class="nc" id="L29">@AllArgsConstructor</span>
+<span class="nc" id="L30">@NoArgsConstructor</span>
+public class ServiceEnt {
+
+    public static final String TABLE = &quot;service&quot;;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = Columns.ID)
+    @ApiModelProperty(hidden = true)
+<span class="nc" id="L39">    private long id;</span>
+
+
+    @Column(name = Columns.NAME,columnDefinition = &quot;NVARCHAR(100)&quot;,updatable = false, nullable = false)
+    @EqualsAndHashCode.Include
+    @ApiModelProperty(	example=&quot;federation&quot;,allowEmptyValue = false, position =1, value = &quot;Required: Service name represents the tag of service. &quot;, required = true)
+<span class="nc" id="L45">    private String name;</span>
+
+    @Column(name = Columns.BASE_URL,columnDefinition = &quot;NVARCHAR(400)&quot;,updatable = true, nullable = false)
+    @ApiModelProperty(	example=&quot;http://localhost&quot;,allowEmptyValue = false, position =2, value = &quot;Required: The URL where the service is available&quot;, required = true)
+<span class="nc" id="L49">    private String baseURL;</span>
+
+    @Column(name = Columns.PORT,columnDefinition = &quot;INT&quot;,updatable = true, nullable = true)
+    @ApiModelProperty(	example=&quot;8080&quot;,allowEmptyValue = false, position =3, value = &quot;Optional: The port where the service is available&quot;, required = false)
+<span class="nc" id="L53">    private Integer port;</span>
+
+    @Column(name = Columns.HEALTH_ENDPOINT,columnDefinition = &quot;NVARCHAR(200)&quot;,updatable = true, nullable = true)
+    @ApiModelProperty(	example=&quot;http://localhost&quot;,allowEmptyValue = false, position =3, value = &quot;Required: The PATH where the service is available&quot;, required = true)
+<span class="nc" id="L57">    private String healthEndpoint;</span>
+
+    @Column(name = Columns.STATUS, nullable = false,columnDefinition = &quot;VARCHAR(40) DEFAULT 'UNKNOWN'&quot;,length = 40)
+    @Enumerated(value = EnumType.STRING)
+    @ApiModelProperty(	example=&quot;http://localhost&quot;,allowEmptyValue = false, position =3, value = &quot;Required: The last status of the service&quot;, required = true)
+<span class="nc" id="L62">    private Status status;</span>
+
+    @JsonIgnore
+    @ManyToOne(optional = false, cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @JoinColumn(name = &quot;node_id&quot;,nullable = false)
+    @EqualsAndHashCode.Include
+<span class="nc" id="L68">    private NodeEnt nodeEnt;</span>
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = &quot;service&quot;, cascade = CascadeType.ALL)
+    @ApiModelProperty(	example=&quot;sparql&quot;, allowEmptyValue = true ,position =4, readOnly=false, value = &quot;Optional: Set Types of the service&quot;, required = false)
+<span class="nc" id="L72">    private Set&lt;TypeEnt&gt; types;</span>
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = &quot;service&quot;, cascade = CascadeType.ALL)
+    @ApiModelProperty( allowEmptyValue = true ,position =5, readOnly=false, value = &quot;Optional: Set of request to check service status&quot;, required = false)
+<span class="nc" id="L77">    private List&lt;HealthRequest&gt; healthRequests;</span>
+
+<span class="nc" id="L79">    public ServiceEnt(NodeEnt node, String name, String baseURL,Integer port, String healthEndpoint) {</span>
+<span class="nc" id="L80">        this.name = name;</span>
+<span class="nc" id="L81">        this.baseURL = baseURL;</span>
+<span class="nc" id="L82">        this.port = port;</span>
+<span class="nc" id="L83">        this.healthEndpoint = healthEndpoint;</span>
+<span class="nc" id="L84">        this.status = Status.UNKNOWN;</span>
+<span class="nc" id="L85">        this.nodeEnt = node;</span>
+<span class="nc" id="L86">        this.types = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L87">        this.healthRequests = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L88">    }</span>
+
+    public URL buildBaseURL() throws MalformedURLException {
+<span class="nc" id="L91">        StringBuffer sb = new StringBuffer();</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (this.baseURL!=null) {</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            sb.append(this.baseURL.endsWith(&quot;/&quot;) ? this.baseURL.substring(0, this.baseURL.length() - 1) : this.baseURL);</span>
+        }
+
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (this.port != null) {</span>
+<span class="nc" id="L97">            sb.append(String.format(&quot;:%d&quot;,this.port));</span>
+        }
+<span class="nc" id="L99">        return new URL(sb.toString());</span>
+    }
+
+    public URL buildHealthURL() throws MalformedURLException {
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (healthEndpoint == null)</span>
+<span class="nc" id="L104">            return null;</span>
+<span class="nc" id="L105">        StringBuffer sb = new StringBuffer();</span>
+<span class="nc" id="L106">        sb.append(buildBaseURL());</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (this.healthEndpoint!=null) {</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">            sb.append(this.healthEndpoint.startsWith(&quot;/&quot;)?this.healthEndpoint:String.format(&quot;/%s&quot;,this.healthEndpoint));</span>
+        }
+<span class="nc" id="L110">        return new URL(sb.toString());</span>
+    }
+
+    public void merge(ServiceEnt other) {
+<span class="nc" id="L114">        this.baseURL = other.baseURL;</span>
+<span class="nc" id="L115">        this.port = other.port;</span>
+<span class="nc" id="L116">        this.healthEndpoint = other.healthEndpoint;</span>
+<span class="nc" id="L117">        this.status = other.status;</span>
+<span class="nc" id="L118">    }</span>
+
+    public List&lt;TypeEnt&gt; filterTypeByName(String name) {
+<span class="nc" id="L121">        return this.types.stream().filter(te -&gt; te.getName().equals(name)).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Column name constants.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    static final class Columns {
+        /**
+         * ID column.
+         */
+        protected static final String ID = &quot;id&quot;;
+        /**
+         * NAME column.
+         */
+        protected static final String NAME = &quot;name&quot;;
+        /**
+         * BASE_URL column.
+         */
+        protected static final String BASE_URL = &quot;base_url&quot;;
+        /**
+         * PORT column.
+         */
+        protected static final String PORT = &quot;port&quot;;
+        /**
+         * HEALTH_ENDPOINT column.
+         */
+        protected static final String HEALTH_ENDPOINT = &quot;health_endpoint&quot;;
+        /**
+         * STATUS column.
+         */
+        protected static final String STATUS = &quot;status&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

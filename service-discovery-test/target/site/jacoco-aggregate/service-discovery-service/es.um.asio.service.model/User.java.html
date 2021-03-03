@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">UM - ASIO - service-discovery-test</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.model</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package es.um.asio.service.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Lists;
+import es.um.asio.audit.model.Auditable;
+import es.um.asio.service.util.JpaConstants;
+import es.um.asio.service.util.ValidationConstants;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+/**
+ * Application user.
+ */
+@Entity
+@Table(name = User.TABLE, indexes = { @Index(columnList = User.Columns.NAME) }, uniqueConstraints = {
+        @UniqueConstraint(columnNames = User.Columns.EMAIL), @UniqueConstraint(columnNames = User.Columns.USERNAME) })
+@Getter
+<span class="nc" id="L26">@Setter</span>
+<span class="nc" id="L27">@ToString(includeFieldNames = true)</span>
+<span class="nc bnc" id="L28" title="All 14 branches missed.">@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)</span>
+<span class="nc" id="L29">public class User extends Auditable implements UserDetails {</span>
+
+    /**
+     * Version ID.
+     */
+    private static final long serialVersionUID = -8605786237765754616L;
+
+    /**
+     * The id.
+     */
+    @Id
+    @GeneratedValue(generator = JpaConstants.HIBERNATE_UUID_GENERATOR_NAME)
+    @GenericGenerator(name = JpaConstants.HIBERNATE_UUID_GENERATOR_NAME, strategy = JpaConstants.HIBERNATE_UUID_GENERATOR_STRATEGY)
+    @Column(name = Columns.ID)
+    @EqualsAndHashCode.Include
+<span class="nc" id="L44">    private String id;</span>
+
+    /**
+     * User real name.
+     */
+    @Size(min = 1, max = ValidationConstants.MAX_LENGTH_DEFAULT)
+    @Column(name = Columns.NAME, nullable = true, length = ValidationConstants.MAX_LENGTH_DEFAULT)
+<span class="nc" id="L51">    private String name;</span>
+
+    /**
+     * Email.
+     */
+    @Column(name = Columns.EMAIL)
+<span class="nc" id="L57">    private String email;</span>
+
+    /**
+     * Flag that indicates whether user is enabled or not.
+     */
+    @Column(name = Columns.ENABLED)
+<span class="nc" id="L63">    private boolean enabled;</span>
+
+    /**
+     * Flag that indicates whether credentials are expired or not.
+     */
+    @Column(name = Columns.CREDENTIALS_NON_EXPIRED)
+<span class="nc" id="L69">    private boolean credentialsNonExpired;</span>
+
+    /**
+     * Flag that indicates whether account are expired or not.
+     */
+    @Column(name = Columns.ACCOUNT_NON_EXPIRED)
+<span class="nc" id="L75">    private boolean accountNonExpired;</span>
+
+    /**
+     * Flag that indicates whether account is expired or not.
+     */
+    @Column(name = Columns.ACCOUNT_NON_LOCKED)
+<span class="nc" id="L81">    private boolean accountNonLocked;</span>
+
+    /**
+     * User password.
+     */
+    @Column(name = Columns.PASSWORD)
+<span class="nc" id="L87">    private String password;</span>
+
+    /**
+     * Password recovery hash.
+     */
+    @Column(name = Columns.PASSWORD_RECOVERY_HASH)
+<span class="nc" id="L93">    private String passwordRecoveryHash;</span>
+
+    /**
+     * User name
+     */
+    @Column(name = Columns.USERNAME)
+<span class="nc" id="L99">    private String username;</span>
+
+    /**
+     * Country
+     */
+    @Column(name = Columns.COUNTRY)
+<span class="nc" id="L105">    private String country;</span>
+
+    /**
+     * City
+     */
+    @Column(name = Columns.CITY)
+<span class="nc" id="L111">    private String city;</span>
+
+    /**
+     * Language
+     */
+    @Column(name = Columns.LANGUAGE)
+<span class="nc" id="L117">    private String language;</span>
+
+    /**
+     * Address
+     */
+    @Column(name = Columns.ADDRESS)
+<span class="nc" id="L123">    private String address;</span>
+
+    /**
+     * Role list.
+     */
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JoinTable(name = UserRole.TABLE, joinColumns = { @JoinColumn(name = UserRole.Columns.USER_ID) })
+    @Column(name = Columns.ROLE, nullable = false)
+    @Enumerated(EnumType.STRING)
+<span class="nc" id="L132">    private Set&lt;Role&gt; roles;</span>
+
+    /**
+     * Version
+     */
+    @Version
+<span class="nc" id="L138">    private Integer version;</span>
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.security.core.userdetails.UserDetails#getAuthorities()
+     */
+    @JsonIgnore
+    @Override
+    public Collection&lt;? extends GrantedAuthority&gt; getAuthorities() {
+<span class="nc" id="L147">        return this.transform(</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">                Collections.unmodifiableList(Lists.newArrayList(this.roles == null ? new HashSet&lt;Role&gt;() : this.roles)),</span>
+                USER_AUTHORITY_TRANSFORMATION);
+    }
+
+    /**
+     * Function to transform database user authorities into spring security format.
+     */
+<span class="nc" id="L155">    private static final Function&lt;Role, GrantedAuthority&gt; USER_AUTHORITY_TRANSFORMATION = from -&gt; from</span>
+<span class="nc" id="L156">            .getGrantedAuthority();</span>
+
+    private &lt;K, V, Q extends K&gt; List&lt;V&gt; transform(final List&lt;Q&gt; input, final java.util.function.Function&lt;K, V&gt; tfunc) {
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        if (null == input) {</span>
+<span class="nc" id="L160">            return Collections.emptyList();</span>
+        }
+<span class="nc" id="L162">        return input.stream().map(tfunc).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Table name.
+     */
+    public static final String TABLE = &quot;APPLICATION_USER&quot;;
+
+    /**
+     * Column name constants.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    static final class Columns {
+
+        /**
+         * User name column.
+         */
+        protected static final String USERNAME = &quot;USERNAME&quot;;
+
+        /**
+         * Country column.
+         */
+        protected static final String COUNTRY = &quot;COUNTRY&quot;;
+
+        /**
+         * City column.
+         */
+        protected static final String CITY = &quot;CITY&quot;;
+
+        /**
+         * Language column.
+         */
+        protected static final String LANGUAGE = &quot;LANGUAGE&quot;;
+
+        /**
+         * Address column.
+         */
+        protected static final String ADDRESS = &quot;ADDRESS&quot;;
+
+        /**
+         * User type column.
+         */
+        protected static final String USER_TYPE = &quot;USER_TYPE&quot;;
+
+        /**
+         * ID column.
+         */
+        protected static final String ID = &quot;ID&quot;;
+
+        /**
+         * Name column.
+         */
+        protected static final String NAME = &quot;NAME&quot;;
+
+        /**
+         * eMail column.
+         */
+        protected static final String EMAIL = &quot;EMAIL&quot;;
+
+        /**
+         * Password column.
+         */
+        @SuppressWarnings(&quot;squid:S2068&quot;)
+        protected static final String PASSWORD = &quot;PASSWORD&quot;;
+
+        /**
+         * Enabled column.
+         */
+        protected static final String ENABLED = &quot;ENABLED&quot;;
+
+        /**
+         * Credentials non expired column.
+         */
+        protected static final String CREDENTIALS_NON_EXPIRED = &quot;CREDENTIALS_NON_EXPIRED&quot;;
+
+        /**
+         * Accoumnt non expired column.
+         */
+        protected static final String ACCOUNT_NON_EXPIRED = &quot;ACCOUNT_NON_EXPIRED&quot;;
+
+        /**
+         * Account non locked column.
+         */
+        protected static final String ACCOUNT_NON_LOCKED = &quot;ACCOUNT_NON_LOCKED&quot;;
+
+        /**
+         * Password recovery hash column.
+         */
+        @SuppressWarnings(&quot;squid:S2068&quot;)
+        protected static final String PASSWORD_RECOVERY_HASH = &quot;PASSWORD_RECOVERY_HASH&quot;;
+
+        /**
+         * Roles column.
+         */
+        protected static final String ROLE = &quot;ROLE&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

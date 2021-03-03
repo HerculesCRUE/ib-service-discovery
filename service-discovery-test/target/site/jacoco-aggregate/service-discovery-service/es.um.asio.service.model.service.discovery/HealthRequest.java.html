@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>HealthRequest.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">UM - ASIO - service-discovery-test</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.model.service.discovery</a> &gt; <span class="el_source">HealthRequest.java</span></div><h1>HealthRequest.java</h1><pre class="source lang-java linenums">package es.um.asio.service.model.service.discovery;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = HealthRequest.TABLE)
+@Getter
+<span class="nc" id="L13">@Setter</span>
+<span class="nc bnc" id="L14" title="All 18 branches missed.">@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)</span>
+<span class="nc" id="L15">@AllArgsConstructor</span>
+<span class="nc" id="L16">@NoArgsConstructor</span>
+public class HealthRequest {
+
+    public static final String TABLE = &quot;health_request&quot;;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = Columns.ID)
+    @EqualsAndHashCode.Include
+    @ApiModelProperty(hidden = true)
+<span class="nc" id="L26">    private long id;</span>
+
+    @Column(name = Columns.REQUEST_DATE, nullable = false)
+    @EqualsAndHashCode.Include
+    @ApiModelProperty(	example=&quot;12233556568844&quot;,allowEmptyValue = false, position =1, value = &quot;Required: Timestamp in millisecons from last request. &quot;, required = true)
+<span class="nc" id="L31">    private long requestDate;</span>
+
+    @Column(name = Columns.STATUS, nullable = false,columnDefinition = &quot;VARCHAR(40) DEFAULT 'UNKNOWN'&quot;,length = 40)
+    @Enumerated(value = EnumType.STRING)
+    @EqualsAndHashCode.Include
+    @ApiModelProperty(	example=&quot;12233556568844&quot;,allowEmptyValue = false, position =2, value = &quot;Required: The status of last last request. &quot;, required = true)
+<span class="nc" id="L37">    private Status status;</span>
+
+    @JsonIgnore
+    @ManyToOne(optional = false, cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+<span class="nc" id="L42">    private ServiceEnt service;</span>
+
+<span class="nc" id="L44">    public HealthRequest(ServiceEnt service, Status status) {</span>
+<span class="nc" id="L45">        this.requestDate = new Date().getTime();</span>
+<span class="nc" id="L46">        this.status = status;</span>
+<span class="nc" id="L47">        this.service = service;</span>
+<span class="nc" id="L48">    }</span>
+
+    /**
+     * Column name constants.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    static final class Columns {
+        /**
+         * ID column.
+         */
+        protected static final String ID = &quot;id&quot;;
+        /**
+         * BASE_URL column.
+         */
+        protected static final String REQUEST_DATE = &quot;request_timestamp&quot;;
+        /**
+         * STATUS column.
+         */
+        protected static final String STATUS = &quot;status&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -229,5 +229,6 @@
 	  <module>service-discovery-jpa-abstractions</module>
 	  <module>service-discovery-service-abstractions</module>
 	  <module>service-discovery-audit</module>
+	  <module>service-discovery-test</module>
   </modules>
 </project>

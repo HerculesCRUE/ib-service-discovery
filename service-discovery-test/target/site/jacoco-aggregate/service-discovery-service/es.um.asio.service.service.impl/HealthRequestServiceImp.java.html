@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>HealthRequestServiceImp.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">UM - ASIO - service-discovery-test</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.service.impl</a> &gt; <span class="el_source">HealthRequestServiceImp.java</span></div><h1>HealthRequestServiceImp.java</h1><pre class="source lang-java linenums">package es.um.asio.service.service.impl;
+
+import es.um.asio.audit.abstractions.exception.NoSuchEntityException;
+import es.um.asio.service.filter.HealthRequestFilter;
+import es.um.asio.service.filter.SearchCriteria;
+import es.um.asio.service.filter.SearchOperation;
+import es.um.asio.service.model.service.discovery.HealthRequest;
+import es.um.asio.service.repository.HealthRequestRepository;
+import es.um.asio.service.service.HealthRequestService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Date;
+import java.util.Optional;
+
+@Service
+<span class="nc" id="L22">public class HealthRequestServiceImp implements HealthRequestService {</span>
+
+    @Autowired
+    HealthRequestRepository repository;
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public List&lt;HealthRequest&gt; getAllNodes() {
+<span class="nc" id="L30">        return repository.findAll();</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public void delete(HealthRequest entity) {
+<span class="nc" id="L36">        repository.delete(entity);</span>
+<span class="nc" id="L37">    }</span>
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public void delete(Long identifier) {
+<span class="nc" id="L42">        repository.deleteById(identifier);</span>
+<span class="nc" id="L43">    }</span>
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public Optional&lt;HealthRequest&gt; find(Long identifier) {
+<span class="nc" id="L48">        return repository.findById(identifier);</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public Page&lt;HealthRequest&gt; findPaginated(HealthRequestFilter filter, Pageable pageable) {
+<span class="nc" id="L54">        return repository.findAll(filter, pageable);</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public List&lt;HealthRequest&gt; findAll() {
+<span class="nc" id="L60">        return repository.findAll();</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public HealthRequest save(HealthRequest entity) {
+<span class="nc" id="L66">        return repository.save(entity);</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public List&lt;HealthRequest&gt; save(Iterable&lt;HealthRequest&gt; entities) {
+<span class="nc" id="L72">        return repository.saveAll(entities);</span>
+    }
+
+    // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public HealthRequest update(HealthRequest entity) throws NoSuchEntityException {
+<span class="nc" id="L78">        return repository.save(entity);</span>
+    }
+
+    // @Override
+    public void deleteOldHealthRequest(Date date) {
+<span class="nc" id="L83">        HealthRequestFilter f = new HealthRequestFilter();</span>
+<span class="nc" id="L84">        f.add(new SearchCriteria(&quot;requestDate&quot;, new Date().getTime(), SearchOperation.LESS_THAN_EQUAL));</span>
+<span class="nc" id="L85">        List&lt;HealthRequest&gt; healthRequestsOld = repository.findAll(f);</span>
+<span class="nc" id="L86">        repository.deleteAll(healthRequestsOld);</span>
+<span class="nc" id="L87">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

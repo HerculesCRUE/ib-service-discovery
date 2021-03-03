@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>CheckHealthOfServices.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">UM - ASIO - service-discovery-test</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.jobs</a> &gt; <span class="el_source">CheckHealthOfServices.java</span></div><h1>CheckHealthOfServices.java</h1><pre class="source lang-java linenums">package es.um.asio.service.jobs;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import es.um.asio.service.model.service.discovery.HealthRequest;
+import es.um.asio.service.model.service.discovery.NodeEnt;
+import es.um.asio.service.model.service.discovery.ServiceEnt;
+import es.um.asio.service.model.service.discovery.Status;
+import es.um.asio.service.service.HealthRequestService;
+import es.um.asio.service.service.NodeService;
+import es.um.asio.service.service.ServiceService;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jsoup.Connection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
+import java.text.SimpleDateFormat;
+
+@Component
+<span class="nc" id="L35">public class CheckHealthOfServices {</span>
+
+    @Autowired
+    NodeService nodeService;
+
+    @Autowired
+    ServiceService serviceService;
+
+    @Autowired
+    HealthRequestService healthRequestService;
+
+<span class="nc" id="L46">    private static final Logger log = LoggerFactory.getLogger(CheckHealthOfServices.class);</span>
+<span class="nc" id="L47">    private static final SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy/MM/dd HH:mm:ss.sss&quot;);</span>
+
+    @Scheduled(fixedRate = 300000)
+    public void checkHealthOfServices() {
+<span class="nc" id="L51">        Calendar c = Calendar.getInstance();</span>
+<span class="nc" id="L52">        c.setTime(new Date());</span>
+<span class="nc" id="L53">        c.add(Calendar.DATE,-7);</span>
+<span class="nc" id="L54">        healthRequestService.deleteOldHealthRequest(c.getTime());</span>
+<span class="nc" id="L55">        List&lt;NodeEnt&gt; nodes = nodeService.getAllNodes();</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        for (NodeEnt node: nodes) {</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            for (ServiceEnt service: node.getServices()) {</span>
+                try {
+<span class="nc" id="L59">                    URL url = service.buildHealthURL();</span>
+<span class="nc bnc" id="L60" title="All 4 branches missed.">                    if (url!=null &amp;&amp; !url.equals(&quot;&quot;)) {</span>
+                        try {
+<span class="nc" id="L62">                            AbstractMap.SimpleEntry&lt;Integer, JsonElement&gt; response = doRequest(url, Connection.Method.GET, null, null, null);</span>
+<span class="nc bnc" id="L63" title="All 4 branches missed.">                            if (response.getKey() &gt;= 200 &amp;&amp; response.getKey() &lt;= 399) {</span>
+<span class="nc" id="L64">                                service.setStatus(Status.UP);</span>
+<span class="nc" id="L65">                                service.getHealthRequests().add(new HealthRequest(service, Status.UP));</span>
+                            } else {
+<span class="nc" id="L67">                                service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
+                            }
+<span class="nc" id="L69">                        } catch (Exception e) {</span>
+<span class="nc" id="L70">                            service.setStatus(Status.DOWN);</span>
+<span class="nc" id="L71">                            service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
+<span class="nc" id="L72">                        }</span>
+                    } else {
+<span class="nc" id="L74">                        service.setStatus(Status.UNKNOWN);</span>
+                    }
+<span class="nc" id="L76">                    serviceService.save(service);</span>
+<span class="nc" id="L77">                } catch (MalformedURLException e) {</span>
+<span class="nc" id="L78">                    e.printStackTrace();</span>
+<span class="nc" id="L79">                    service.setStatus(Status.UNKNOWN);</span>
+<span class="nc" id="L80">                    service.getHealthRequests().add(new HealthRequest(service, Status.UNKNOWN));</span>
+<span class="nc" id="L81">                }</span>
+<span class="nc" id="L82">                log.info(&quot;Node: {},\tService: {},\tStatus: {}&quot;,node.getName(),service.getName(),service.getStatus());</span>
+<span class="nc" id="L83">            }</span>
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">    }</span>
+
+    public void checkHealthOfServices(NodeEnt node) {
+<span class="nc" id="L88">        Calendar c = Calendar.getInstance();</span>
+<span class="nc" id="L89">        c.setTime(new Date());</span>
+<span class="nc" id="L90">        c.add(Calendar.DATE,-7);</span>
+<span class="nc" id="L91">        healthRequestService.deleteOldHealthRequest(c.getTime());</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        for (ServiceEnt service: node.getServices()) {</span>
+            try {
+<span class="nc" id="L94">                URL url = service.buildHealthURL();</span>
+<span class="nc bnc" id="L95" title="All 4 branches missed.">                if (url!=null &amp;&amp; !url.equals(&quot;&quot;)) {</span>
+                    try {
+<span class="nc" id="L97">                        AbstractMap.SimpleEntry&lt;Integer, JsonElement&gt; response = doRequest(url, Connection.Method.GET, null, null, null);</span>
+<span class="nc bnc" id="L98" title="All 4 branches missed.">                        if (response.getKey() &gt;= 200 &amp;&amp; response.getKey() &lt;= 399) {</span>
+<span class="nc" id="L99">                            service.setStatus(Status.UP);</span>
+<span class="nc" id="L100">                            service.getHealthRequests().add(new HealthRequest(service, Status.UP));</span>
+                        } else {
+<span class="nc" id="L102">                            service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
+                        }
+<span class="nc" id="L104">                    } catch (Exception e) {</span>
+<span class="nc" id="L105">                        service.setStatus(Status.DOWN);</span>
+<span class="nc" id="L106">                        service.getHealthRequests().add(new HealthRequest(service, Status.DOWN));</span>
+<span class="nc" id="L107">                    }</span>
+                } else {
+<span class="nc" id="L109">                    service.setStatus(Status.UNKNOWN);</span>
+                }
+<span class="nc" id="L111">                serviceService.save(service);</span>
+<span class="nc" id="L112">            } catch (MalformedURLException e) {</span>
+<span class="nc" id="L113">                e.printStackTrace();</span>
+<span class="nc" id="L114">                service.setStatus(Status.UNKNOWN);</span>
+<span class="nc" id="L115">                service.getHealthRequests().add(new HealthRequest(service, Status.UNKNOWN));</span>
+<span class="nc" id="L116">            }</span>
+<span class="nc" id="L117">            log.info(&quot;Node: {},	Service: {},	Status: {}&quot;,node.getName(),service.getName(),service.getStatus());</span>
+<span class="nc" id="L118">        }</span>
+<span class="nc" id="L119">    }</span>
+
+    private AbstractMap.SimpleEntry&lt;Integer,JsonElement&gt; doRequest(URL url, Connection.Method method, Map&lt;String,String&gt; headers, Map&lt;String,String&gt; params, Map&lt;String,String&gt; queryParams) throws IOException {
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (queryParams!=null) {</span>
+<span class="nc" id="L123">            url = buildQueryParams(url,queryParams);</span>
+        }
+<span class="nc" id="L125">        HttpURLConnection con = (HttpURLConnection) url.openConnection();</span>
+<span class="nc" id="L126">        con.setRequestMethod(method.toString());</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (headers!=null) {</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; headerEntry : headers.entrySet()) {</span>
+<span class="nc" id="L129">                con.setRequestProperty(headerEntry.getKey(),headerEntry.getValue());</span>
+<span class="nc" id="L130">            }</span>
+        }
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (params!=null) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; paramEntry : params.entrySet()) {</span>
+<span class="nc" id="L134">                con.setRequestProperty(paramEntry.getKey(),paramEntry.getValue());</span>
+<span class="nc" id="L135">            }</span>
+        }
+<span class="nc" id="L137">        con.setDoOutput(true);</span>
+<span class="nc" id="L138">        con.connect();</span>
+<span class="nc" id="L139">        int code = con.getResponseCode();</span>
+        StringBuilder response;
+<span class="nc" id="L141">        try(BufferedReader br = new BufferedReader(</span>
+<span class="nc" id="L142">                new InputStreamReader(con.getInputStream(), &quot;utf-8&quot;))) {</span>
+<span class="nc" id="L143">            response = new StringBuilder();</span>
+            String responseLine;
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            while ((responseLine = br.readLine()) != null) {</span>
+<span class="nc" id="L146">                response.append(responseLine.trim());</span>
+            }
+        }
+<span class="nc" id="L149">        con.disconnect();</span>
+        JsonElement jResponse;
+        try {
+<span class="nc" id="L152">            jResponse = new Gson().fromJson(response.toString(), JsonElement.class);</span>
+<span class="nc" id="L153">        } catch (Exception e) {</span>
+<span class="nc" id="L154">            jResponse = new JsonObject();</span>
+<span class="nc" id="L155">        }</span>
+<span class="nc" id="L156">        return new AbstractMap.SimpleEntry&lt;Integer,JsonElement&gt;(code, jResponse) {</span>
+        };
+
+    }
+
+    private URL buildQueryParams(URL baseURL, Map&lt;String,String&gt; queryParams) throws MalformedURLException, UnsupportedEncodingException {
+<span class="nc" id="L162">        StringBuffer base = new StringBuffer();</span>
+<span class="nc" id="L163">        base.append(baseURL.toString());</span>
+<span class="nc bnc" id="L164" title="All 4 branches missed.">        if (queryParams!=null &amp;&amp; queryParams.size()&gt;0) {</span>
+<span class="nc" id="L165">            base.append(&quot;?&quot;);</span>
+<span class="nc" id="L166">            List&lt;String&gt; qpList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; qpEntry : queryParams.entrySet()) {</span>
+<span class="nc" id="L168">                qpList.add(qpEntry.getKey()+&quot;=&quot;+ URLEncoder.encode(qpEntry.getValue(), StandardCharsets.UTF_8.toString()));</span>
+<span class="nc" id="L169">            }</span>
+<span class="nc" id="L170">            base.append(String.join(&quot;&amp;&quot;,qpList));</span>
+        }
+<span class="nc" id="L172">        return new URL(base.toString());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

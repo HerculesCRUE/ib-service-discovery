@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>UserMapperImpl_.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">UM - ASIO - service-discovery-test</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.mapper</a> &gt; <span class="el_source">UserMapperImpl_.java</span></div><h1>UserMapperImpl_.java</h1><pre class="source lang-java linenums">package es.um.asio.service.mapper;
+
+import es.um.asio.audit.abstractions.search.PageImplHelper;
+import es.um.asio.service.dto.UserDto;
+import es.um.asio.service.model.Role;
+import es.um.asio.service.model.User;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;
+)
+@Component
+@Qualifier(&quot;delegate&quot;)
+<span class="nc" id="L21">public class UserMapperImpl_ implements UserMapper {</span>
+
+    @Override
+    public UserDto convertToDto(User entity) {
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        if ( entity == null ) {</span>
+<span class="nc" id="L26">            return null;</span>
+        }
+
+<span class="nc" id="L29">        UserDto userDto = new UserDto();</span>
+
+<span class="nc" id="L31">        userDto.setId( entity.getId() );</span>
+<span class="nc" id="L32">        userDto.setName( entity.getName() );</span>
+<span class="nc" id="L33">        userDto.setEmail( entity.getEmail() );</span>
+<span class="nc" id="L34">        userDto.setEnabled( entity.isEnabled() );</span>
+<span class="nc" id="L35">        userDto.setCredentialsNonExpired( entity.isCredentialsNonExpired() );</span>
+<span class="nc" id="L36">        userDto.setAccountNonExpired( entity.isAccountNonExpired() );</span>
+<span class="nc" id="L37">        userDto.setAccountNonLocked( entity.isAccountNonLocked() );</span>
+<span class="nc" id="L38">        userDto.setPassword( entity.getPassword() );</span>
+<span class="nc" id="L39">        userDto.setUsername( entity.getUsername() );</span>
+<span class="nc" id="L40">        userDto.setCountry( entity.getCountry() );</span>
+<span class="nc" id="L41">        userDto.setCity( entity.getCity() );</span>
+<span class="nc" id="L42">        userDto.setLanguage( entity.getLanguage() );</span>
+<span class="nc" id="L43">        userDto.setAddress( entity.getAddress() );</span>
+<span class="nc" id="L44">        Set&lt;Role&gt; set = entity.getRoles();</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if ( set != null ) {</span>
+<span class="nc" id="L46">            userDto.setRoles( new HashSet&lt;Role&gt;( set ) );</span>
+        }
+<span class="nc" id="L48">        userDto.setVersion( entity.getVersion() );</span>
+
+<span class="nc" id="L50">        userDto.setPasswordChanged( false );</span>
+
+<span class="nc" id="L52">        return userDto;</span>
+    }
+
+    @Override
+    public List&lt;UserDto&gt; convertToDto(List&lt;User&gt; entities) {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if ( entities == null ) {</span>
+<span class="nc" id="L58">            return null;</span>
+        }
+
+<span class="nc" id="L61">        List&lt;UserDto&gt; list = new ArrayList&lt;UserDto&gt;( entities.size() );</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        for ( User user : entities ) {</span>
+<span class="nc" id="L63">            list.add( convertToDto( user ) );</span>
+<span class="nc" id="L64">        }</span>
+
+<span class="nc" id="L66">        return list;</span>
+    }
+
+    @Override
+    public PageImplHelper&lt;UserDto&gt; convertToDto(Page&lt;User&gt; page) {
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if ( page == null ) {</span>
+<span class="nc" id="L72">            return null;</span>
+        }
+
+<span class="nc" id="L75">        PageImplHelper&lt;UserDto&gt; pageImplHelper = new PageImplHelper&lt;UserDto&gt;();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        for ( User user : page ) {</span>
+<span class="nc" id="L77">            pageImplHelper.add( convertToDto( user ) );</span>
+<span class="nc" id="L78">        }</span>
+
+<span class="nc" id="L80">        return pageImplHelper;</span>
+    }
+
+    @Override
+    public User convertFromDto(UserDto dto) {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if ( dto == null ) {</span>
+<span class="nc" id="L86">            return null;</span>
+        }
+
+<span class="nc" id="L89">        User user = new User();</span>
+
+<span class="nc" id="L91">        user.setId( dto.getId() );</span>
+<span class="nc" id="L92">        user.setName( dto.getName() );</span>
+<span class="nc" id="L93">        user.setEmail( dto.getEmail() );</span>
+<span class="nc" id="L94">        user.setEnabled( dto.isEnabled() );</span>
+<span class="nc" id="L95">        user.setCredentialsNonExpired( dto.isCredentialsNonExpired() );</span>
+<span class="nc" id="L96">        user.setAccountNonExpired( dto.isAccountNonExpired() );</span>
+<span class="nc" id="L97">        user.setAccountNonLocked( dto.isAccountNonLocked() );</span>
+<span class="nc" id="L98">        user.setPassword( dto.getPassword() );</span>
+<span class="nc" id="L99">        user.setUsername( dto.getUsername() );</span>
+<span class="nc" id="L100">        user.setCountry( dto.getCountry() );</span>
+<span class="nc" id="L101">        user.setCity( dto.getCity() );</span>
+<span class="nc" id="L102">        user.setLanguage( dto.getLanguage() );</span>
+<span class="nc" id="L103">        user.setAddress( dto.getAddress() );</span>
+<span class="nc" id="L104">        Set&lt;Role&gt; set = dto.getRoles();</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if ( set != null ) {</span>
+<span class="nc" id="L106">            user.setRoles( new HashSet&lt;Role&gt;( set ) );</span>
+        }
+<span class="nc" id="L108">        user.setVersion( dto.getVersion() );</span>
+
+<span class="nc" id="L110">        return user;</span>
+    }
+
+    @Override
+    public Iterable&lt;User&gt; convertFromDto(Iterable&lt;UserDto&gt; dto) {
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if ( dto == null ) {</span>
+<span class="nc" id="L116">            return null;</span>
+        }
+
+<span class="nc" id="L119">        ArrayList&lt;User&gt; iterable = new ArrayList&lt;User&gt;();</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        for ( UserDto userDto : dto ) {</span>
+<span class="nc" id="L121">            iterable.add( convertFromDto( userDto ) );</span>
+<span class="nc" id="L122">        }</span>
+
+<span class="nc" id="L124">        return iterable;</span>
+    }
+
+    @Override
+    public User updateFromDto(UserDto dto, User entity) {
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        if ( dto == null ) {</span>
+<span class="nc" id="L130">            return null;</span>
+        }
+
+<span class="nc" id="L133">        entity.setId( dto.getId() );</span>
+<span class="nc" id="L134">        entity.setName( dto.getName() );</span>
+<span class="nc" id="L135">        entity.setEmail( dto.getEmail() );</span>
+<span class="nc" id="L136">        entity.setEnabled( dto.isEnabled() );</span>
+<span class="nc" id="L137">        entity.setCredentialsNonExpired( dto.isCredentialsNonExpired() );</span>
+<span class="nc" id="L138">        entity.setAccountNonExpired( dto.isAccountNonExpired() );</span>
+<span class="nc" id="L139">        entity.setAccountNonLocked( dto.isAccountNonLocked() );</span>
+<span class="nc" id="L140">        entity.setPassword( dto.getPassword() );</span>
+<span class="nc" id="L141">        entity.setUsername( dto.getUsername() );</span>
+<span class="nc" id="L142">        entity.setCountry( dto.getCountry() );</span>
+<span class="nc" id="L143">        entity.setCity( dto.getCity() );</span>
+<span class="nc" id="L144">        entity.setLanguage( dto.getLanguage() );</span>
+<span class="nc" id="L145">        entity.setAddress( dto.getAddress() );</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if ( entity.getRoles() != null ) {</span>
+<span class="nc" id="L147">            Set&lt;Role&gt; set = dto.getRoles();</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            if ( set != null ) {</span>
+<span class="nc" id="L149">                entity.getRoles().clear();</span>
+<span class="nc" id="L150">                entity.getRoles().addAll( set );</span>
+            }
+            else {
+<span class="nc" id="L153">                entity.setRoles( null );</span>
+            }
+<span class="nc" id="L155">        }</span>
+        else {
+<span class="nc" id="L157">            Set&lt;Role&gt; set = dto.getRoles();</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            if ( set != null ) {</span>
+<span class="nc" id="L159">                entity.setRoles( new HashSet&lt;Role&gt;( set ) );</span>
+            }
+        }
+<span class="nc" id="L162">        entity.setVersion( dto.getVersion() );</span>
+
+<span class="nc" id="L164">        return entity;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

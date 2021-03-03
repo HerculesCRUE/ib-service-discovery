@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ServiceDiscoveryController.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">UM - ASIO - service-discovery-test</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-back</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.back.controller</a> &gt; <span class="el_source">ServiceDiscoveryController.java</span></div><h1>ServiceDiscoveryController.java</h1><pre class="source lang-java linenums">package es.um.asio.back.controller;
+
+import es.um.asio.service.model.service.discovery.NodeEnt;
+import es.um.asio.service.model.service.discovery.TypeEnt;
+import es.um.asio.service.service.impl.ServiceDiscoveryServiceImpl;
+import es.um.asio.service.validation.group.Create;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(ServiceDiscoveryController.Mappings.BASE)
+<span class="nc" id="L17">public class ServiceDiscoveryController {</span>
+
+    @Autowired
+    ServiceDiscoveryServiceImpl service;
+
+    @PostMapping(Mappings.SERVICE)
+    @ApiOperation(value = &quot;Add new Service in Node&quot;)
+    public NodeEnt addService(
+            @ApiParam(name = &quot;nodeName&quot;, value = &quot;Node name&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String nodeName,
+            @ApiParam(name = &quot;serviceName&quot;, value = &quot;Service name&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String serviceName,
+            @ApiParam(name = &quot;host&quot;, value = &quot;Service host&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String host,
+            @ApiParam(name = &quot;port&quot;, value = &quot;Service port&quot;, required = false)
+            @RequestParam(required = false) @Validated(Create.class) final String port,
+            @ApiParam(name = &quot;healthEndpoint&quot;, value = &quot;Health end point&quot;, required = false)
+            @RequestParam(required = false) @Validated(Create.class) final String healthEndpoint
+    ) {
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        return service.addService(nodeName,serviceName,host,(port!=null)?Integer.valueOf(port):null,healthEndpoint);</span>
+    }
+
+    @PostMapping(Mappings.TYPE)
+    @ApiOperation(value = &quot;Add new Type in Service and Node&quot;)
+    public NodeEnt addType(
+            @ApiParam(name = &quot;nodeName&quot;, value = &quot;Node name&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String nodeName,
+            @ApiParam(name = &quot;serviceName&quot;, value = &quot;Service name&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String serviceName,
+            @ApiParam(name = &quot;typeName&quot;, value = &quot;Type name&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String typeName,
+            @ApiParam(name = &quot;suffixURL&quot;, value = &quot;Suffix URL&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String suffixURL
+    ) {
+<span class="nc" id="L51">        return service.addType(nodeName,serviceName,typeName,suffixURL);</span>
+    }
+
+    @GetMapping()
+    @ApiOperation(value = &quot;Get All&quot;)
+    public List&lt;NodeEnt&gt; getAll(
+    ) {
+<span class="nc" id="L58">        return service.getAllNodes();</span>
+    }
+
+    @GetMapping(Mappings.NODE)
+    @ApiOperation(value = &quot;Get Node by name&quot;)
+    public NodeEnt getNodeByName(
+            @ApiParam(name = &quot;nodeName&quot;, value = &quot;Node name&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String nodeName
+    ) {
+<span class="nc" id="L67">        return service.getNode(nodeName);</span>
+    }
+
+    @GetMapping(Mappings.SERVICE)
+    @ApiOperation(value = &quot;Get Service by name&quot;)
+    public List&lt;NodeEnt&gt; getServiceByName(
+            @ApiParam(name = &quot;serviceName&quot;, value = &quot;Service name&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String serviceName
+    ) {
+<span class="nc" id="L76">        return service.getServices(serviceName);</span>
+    }
+
+    @GetMapping(Mappings.SERVICE_TYPE)
+    @ApiOperation(value = &quot;Get Service by name and Type&quot;)
+    public List&lt;NodeEnt&gt; getServiceByNameAndType(
+            @ApiParam(name = &quot;serviceName&quot;, value = &quot;Service name&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String serviceName,
+            @ApiParam(name = &quot;typeName&quot;, value = &quot;Type name&quot;, required = true)
+            @RequestParam(required = true) @Validated(Create.class) final String typeName
+    ) {
+<span class="nc" id="L87">        return service.getServices(serviceName,typeName);</span>
+    }
+
+
+
+    /**
+     * Mappgins.
+     */
+    static final class Mappings {
+
+        private Mappings(){}
+
+        /**
+         * Controller request mapping.
+         */
+        protected static final String BASE = &quot;/service-discovery&quot;;
+
+        protected static final String SERVICE = &quot;/service&quot;;
+
+        protected static final String SERVICE_TYPE = &quot;/service/type&quot;;
+
+        protected static final String NODE = &quot;/node&quot;;
+
+        protected static final String TYPE = &quot;/type&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
