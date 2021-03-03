@@ -1,9 +1,13 @@
 package es.um.asio.service.model.service.discovery;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.Nullable;
+=======
+>>>>>>> master
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -47,7 +51,13 @@ public class ServiceEnt {
     private String baseURL;
 
     @Column(name = Columns.PORT,columnDefinition = "INT",updatable = true, nullable = true)
+<<<<<<< HEAD
     @ApiModelProperty(	example="8080",allowEmptyValue = false, position =3, value = "Optional: The port where the service is available", required = false)
+=======
+    @Min(1)
+    @Max(65535)
+    @ApiModelProperty(	example="8080",allowEmptyValue = false, position =3, value = "Required: The port where the service is available", required = false)
+>>>>>>> master
     private Integer port;
 
     @Column(name = Columns.HEALTH_ENDPOINT,columnDefinition = "NVARCHAR(200)",updatable = true, nullable = true)
@@ -90,7 +100,11 @@ public class ServiceEnt {
         if (this.baseURL!=null) {
             sb.append(this.baseURL.endsWith("/") ? this.baseURL.substring(0, this.baseURL.length() - 1) : this.baseURL);
         }
+<<<<<<< HEAD
         if (this.port!=null) {
+=======
+        if (this.port != null) {
+>>>>>>> master
             sb.append(String.format(":%d",this.port));
         }
         return new URL(sb.toString());

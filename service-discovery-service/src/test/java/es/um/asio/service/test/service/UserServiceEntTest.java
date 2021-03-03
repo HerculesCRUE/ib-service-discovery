@@ -1,6 +1,6 @@
 package es.um.asio.service.test.service;
 
-import com.izertis.abstractions.search.PageImplHelper;
+import es.um.asio.audit.abstractions.search.PageImplHelper;
 import es.um.asio.service.filter.UserFilter;
 import es.um.asio.service.model.User;
 import es.um.asio.service.repository.UserRepository;

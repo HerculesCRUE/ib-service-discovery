@@ -1,6 +1,6 @@
 package es.um.asio.service.mapper;
 
-import com.izertis.abstractions.search.PageImplHelper;
+import es.um.asio.audit.abstractions.search.PageImplHelper;
 import es.um.asio.service.dto.UserDto;
 import es.um.asio.service.mapper.decorator.UserMapperDecorator;
 import es.um.asio.service.model.User;

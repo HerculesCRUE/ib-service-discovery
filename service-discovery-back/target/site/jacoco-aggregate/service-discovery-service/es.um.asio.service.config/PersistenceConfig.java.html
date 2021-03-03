@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PersistenceConfig.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Archetype - Java JPA Rest API - Back</a> &gt; <a href="../index.html" class="el_bundle">service-discovery-service</a> &gt; <a href="index.source.html" class="el_package">es.um.asio.service.config</a> &gt; <span class="el_source">PersistenceConfig.java</span></div><h1>PersistenceConfig.java</h1><pre class="source lang-java linenums">package es.um.asio.service.config;
+
+
+import com.google.common.collect.Sets;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import es.um.asio.service.config.properties.DatasourceProperties;
+import es.um.asio.service.config.properties.JpaProperties;
+import es.um.asio.service.config.properties.PersistenceProperties;
+import es.um.asio.service.model.User;
+import es.um.asio.service.repository.UserRepository;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.cfg.AvailableSettings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+/**
+ * Persistence configuration.
+ */
+@Configuration
+@EnableConfigurationProperties(PersistenceProperties.class)
+@EnableJpaRepositories(basePackageClasses = { UserRepository.class })
+@EnableTransactionManagement
+@EntityScan(basePackageClasses = { User.class })
+<span class="nc" id="L42">public class PersistenceConfig {</span>
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    /**
+     * Configuration properties.
+     */
+    @Autowired
+    private PersistenceProperties properties;
+
+    /**
+     * Configures de datasource for the application.&lt;br&gt;
+     * If {@link DatasourceProperties#jndiName} has a value, it will be used to obtain one instead of using
+     * {@link DatasourceProperties#driverClassName}, {@link DatasourceProperties#url},
+     * {@link DatasourceProperties#username}, {@link DatasourceProperties#password}
+     * fields to build it.&lt;br&gt;
+     * In either case, HikariCP is used to wrap the datasource.
+     *
+     * @return an instance of {@link javax.sql.DataSource} to be used as the datasource
+     */
+    @Bean
+    public DataSource dataSource() {
+<span class="nc" id="L65">        final HikariConfig config = new HikariConfig();</span>
+<span class="nc" id="L66">        final DatasourceProperties datasourceProperties = this.properties.getDatasource();</span>
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (StringUtils.isNotBlank(datasourceProperties.getJndiName())) {</span>
+            // JNDI conection
+<span class="nc" id="L70">            final JndiDataSourceLookup dsLookup = new JndiDataSourceLookup();</span>
+<span class="nc" id="L71">            dsLookup.setResourceRef(true);</span>
+<span class="nc" id="L72">            final DataSource dataSource = dsLookup.getDataSource(datasourceProperties.getJndiName());</span>
+<span class="nc" id="L73">            config.setDataSource(dataSource);</span>
+<span class="nc" id="L74">        } else {</span>
+            // Paarameters connection
+<span class="nc" id="L76">            config.setDriverClassName(datasourceProperties.getDriverClassName());</span>
+<span class="nc" id="L77">            config.setJdbcUrl(datasourceProperties.getUrl());</span>
+<span class="nc" id="L78">            config.setUsername(datasourceProperties.getUsername());</span>
+<span class="nc" id="L79">            config.setPassword(datasourceProperties.getPassword());</span>
+        }
+
+<span class="nc" id="L82">        config.addDataSourceProperty(&quot;cachePrepStmts&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L83">        config.addDataSourceProperty(&quot;prepStmtCacheSize&quot;, &quot;250&quot;);</span>
+<span class="nc" id="L84">        config.addDataSourceProperty(&quot;prepStmtCacheSqlLimit&quot;, &quot;2048&quot;);</span>
+<span class="nc" id="L85">        config.addDataSourceProperty(&quot;useServerPrepStmts&quot;, &quot;true&quot;);</span>
+
+<span class="nc" id="L87">        return new HikariDataSource(config);</span>
+    }
+
+    /**
+     * Builds the entity manager for the application.
+     *
+     * @param dataSource
+     *            The datasource to be used
+     * @return an instance of {@link org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean} for data access
+     */
+    @Bean
+    @Autowired
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(final DataSource dataSource) {
+<span class="nc" id="L100">        final JpaProperties jpa = this.properties.getJpa();</span>
+
+<span class="nc" id="L102">        final LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();</span>
+<span class="nc" id="L103">        entityManagerFactoryBean.setDataSource(dataSource);</span>
+<span class="nc" id="L104">        entityManagerFactoryBean.setPackagesToScan(this.getEntityPackages().stream().toArray(String[]::new));</span>
+<span class="nc" id="L105">        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());</span>
+
+<span class="nc" id="L107">        final Properties jpaProperties = new Properties();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (StringUtils.isNotBlank(jpa.getDialect())) {</span>
+<span class="nc" id="L109">            jpaProperties.put(AvailableSettings.DIALECT, jpa.getDialect());</span>
+        }
+
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (jpa.isGenerateDdl()) {</span>
+<span class="nc" id="L113">            jpaProperties.put(AvailableSettings.HBM2DDL_AUTO, &quot;update&quot;);</span>
+        }
+
+<span class="nc" id="L116">        jpaProperties.put(AvailableSettings.SHOW_SQL, jpa.isShowSql());</span>
+<span class="nc" id="L117">        jpaProperties.put(AvailableSettings.FORMAT_SQL, jpa.isShowSql());</span>
+        
+<span class="nc" id="L119">        jpaProperties.put(AvailableSettings.USE_SECOND_LEVEL_CACHE, false);</span>
+<span class="nc" id="L120">        jpaProperties.putAll(jpa.getProperties());</span>
+
+<span class="nc" id="L122">        entityManagerFactoryBean.setJpaProperties(jpaProperties);</span>
+
+<span class="nc" id="L124">        return entityManagerFactoryBean;</span>
+    }
+
+    /**
+     * Creates and configures the TransactionManager instance for the platform.
+     *
+     * @return an instance of {@link org.springframework.transaction.PlatformTransactionManager}
+     */
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+<span class="nc" id="L134">        return new JpaTransactionManager();</span>
+    }
+
+    /**
+     * Gets packages containing entities.
+     * 
+     * @return Set of packages containing entities
+     */
+    private Set&lt;String&gt; getEntityPackages() {
+<span class="nc" id="L143">        final Set&lt;String&gt; packages = Sets.newHashSet();</span>
+
+<span class="nc" id="L145">        final Map&lt;String, Object&gt; beans = this.applicationContext.getBeansWithAnnotation(EntityScan.class);</span>
+
+        EntityScan annotation;
+
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        for (final String name : beans.keySet()) {</span>
+<span class="nc" id="L150">            annotation = this.applicationContext.findAnnotationOnBean(name, EntityScan.class);</span>
+
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            if(annotation != null) {</span>
+                // Get basePackages configuration
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                if (annotation.basePackages() != null) {</span>
+<span class="nc" id="L155">                    packages.addAll(Arrays.asList(annotation.basePackages()));</span>
+                }
+    
+                // Get basePackageClasses configuration
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                if (annotation.basePackageClasses() != null) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">                    for (final Class&lt;?&gt; clazz : annotation.basePackageClasses()) {</span>
+<span class="nc" id="L161">                        packages.add(clazz.getPackageName());</span>
+                    }
+                }
+            }
+<span class="nc" id="L165">        }</span>
+
+<span class="nc" id="L167">        return packages;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

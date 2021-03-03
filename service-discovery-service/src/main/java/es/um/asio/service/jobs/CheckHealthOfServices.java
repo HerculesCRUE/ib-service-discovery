@@ -147,7 +147,12 @@ public class CheckHealthOfServices {
             }
         }
         con.disconnect();
-        JsonElement jResponse = new Gson().fromJson(response.toString(), JsonElement.class);
+        JsonElement jResponse;
+        try {
+            jResponse = new Gson().fromJson(response.toString(), JsonElement.class);
+        } catch (Exception e) {
+            jResponse = new JsonObject();
+        }
         return new AbstractMap.SimpleEntry<Integer,JsonElement>(code, jResponse) {
         };
 

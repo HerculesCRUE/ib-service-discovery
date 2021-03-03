@@ -1,6 +1,5 @@
 package es.um.asio.service.solr.indexer;
 
-import com.izertis.libraries.solr.autoconfigure.properties.SolrProperties;
 import com.izertis.libraries.solr.indexer.impl.AbstractIndexerImpl;
 import es.um.asio.service.model.User;
 import es.um.asio.service.repository.UserRepository;
@@ -8,6 +7,7 @@ import es.um.asio.service.solr.mapper.UserSolrMapper;
 import es.um.asio.service.solr.model.UserSolr;
 import es.um.asio.service.solr.repository.UserSolrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.izertis.libraries.solr.autoconfigure.properties.SolrProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.CrudRepository;

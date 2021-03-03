@@ -1,8 +1,8 @@
 package es.um.asio.back.test.controller.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.izertis.abstractions.exception.NoSuchEntityException;
-import com.izertis.abstractions.search.PageImplHelper;
+import es.um.asio.audit.abstractions.exception.NoSuchEntityException;
+import es.um.asio.audit.abstractions.search.PageImplHelper;
 import es.um.asio.back.controller.security.UserController;
 import es.um.asio.service.dto.UserDto;
 import es.um.asio.service.filter.UserFilter;
@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
+@ActiveProfiles("dev")
 public class UserControllerTest {
 
     /**
