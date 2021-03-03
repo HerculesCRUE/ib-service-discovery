@@ -1,6 +1,6 @@
 package es.um.asio.service.service.impl;
 
-import com.izertis.abstractions.exception.NoSuchEntityException;
+import es.um.asio.audit.abstractions.exception.NoSuchEntityException;
 import es.um.asio.service.filter.ServiceFilter;
 import es.um.asio.service.model.service.discovery.ServiceEnt;
 import es.um.asio.service.repository.ServiceRepository;

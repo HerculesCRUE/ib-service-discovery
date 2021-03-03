@@ -1,8 +1,8 @@
 package es.um.asio.back.test.controller.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.izertis.abstractions.exception.NoSuchEntityException;
-import com.izertis.abstractions.search.PageImplHelper;
+import es.um.asio.audit.abstractions.exception.NoSuchEntityException;
+import es.um.asio.audit.abstractions.search.PageImplHelper;
 import es.um.asio.back.controller.security.UserController;
 import es.um.asio.service.dto.UserDto;
 import es.um.asio.service.filter.UserFilter;

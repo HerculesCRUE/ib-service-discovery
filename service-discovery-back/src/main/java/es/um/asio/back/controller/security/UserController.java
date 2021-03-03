@@ -1,6 +1,7 @@
 package es.um.asio.back.controller.security;
 
-import com.izertis.abstractions.exception.NoSuchEntityException;
+
+import es.um.asio.audit.abstractions.exception.NoSuchEntityException;
 import es.um.asio.service.dto.UserDto;
 import es.um.asio.service.filter.UserFilter;
 import es.um.asio.service.mapper.UserMapper;

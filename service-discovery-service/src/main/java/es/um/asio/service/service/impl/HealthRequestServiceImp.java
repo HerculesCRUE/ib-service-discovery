@@ -1,6 +1,6 @@
 package es.um.asio.service.service.impl;
 
-import com.izertis.abstractions.exception.NoSuchEntityException;
+import es.um.asio.audit.abstractions.exception.NoSuchEntityException;
 import es.um.asio.service.filter.HealthRequestFilter;
 import es.um.asio.service.filter.SearchCriteria;
 import es.um.asio.service.filter.SearchOperation;

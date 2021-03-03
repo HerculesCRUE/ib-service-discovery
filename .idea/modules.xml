@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/service-discovery-jpa-abstractions/discovery-jpa-abstractions.iml" filepath="$PROJECT_DIR$/service-discovery-jpa-abstractions/discovery-jpa-abstractions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service-discovery-service-abstractions/discovery-service-abstractions.iml" filepath="$PROJECT_DIR$/service-discovery-service-abstractions/discovery-service-abstractions.iml" />
       <module fileurl="file://$PROJECT_DIR$/service-discovery.iml" filepath="$PROJECT_DIR$/service-discovery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service-discovery-audit/service-discovery-audit.iml" filepath="$PROJECT_DIR$/service-discovery-audit/service-discovery-audit.iml" />
       <module fileurl="file://$PROJECT_DIR$/service-discovery-back/service-discovery-back.iml" filepath="$PROJECT_DIR$/service-discovery-back/service-discovery-back.iml" />
       <module fileurl="file://$PROJECT_DIR$/service-discovery-service/service-discovery-service.iml" filepath="$PROJECT_DIR$/service-discovery-service/service-discovery-service.iml" />
     </modules>
