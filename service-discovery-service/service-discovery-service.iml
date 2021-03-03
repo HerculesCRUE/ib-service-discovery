@@ -120,6 +120,7 @@
     <orderEntry type="module" module-name="service-discovery-audit" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:5.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:2.2.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.3" level="project" />
     <orderEntry type="library" name="Maven: com.izertis.libraries:izertis-solr-library:1.1.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-solr:4.1.6.RELEASE" level="project" />
