@@ -24,8 +24,8 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-service-discovery-back/target/generated-sources/
-service-discovery-back/target/generated-test-sources/
-service-discovery-service/target/generated-test-sources/
-target/
-.idea/
+/service-discovery-back/target/generated-sources/
+/service-discovery-back/target/generated-test-sources/
+/service-discovery-service/target/generated-test-sources/
+/target/
+/.idea/
