@@ -2,7 +2,7 @@ package es.um.asio.service.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
-import com.izertis.libraries.audit.jpa.model.Auditable;
+import es.um.asio.audit.model.Auditable;
 import es.um.asio.service.util.JpaConstants;
 import es.um.asio.service.util.ValidationConstants;
 import lombok.*;

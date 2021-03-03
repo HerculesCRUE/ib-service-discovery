@@ -1,6 +1,6 @@
 package es.um.asio.back.test.proxy;
 
-import com.izertis.abstractions.search.PageImplHelper;
+import es.um.asio.audit.abstractions.search.PageImplHelper;
 import es.um.asio.back.test.TestApplication;
 import es.um.asio.service.dto.UserDto;
 import es.um.asio.service.filter.UserFilter;
@@ -31,15 +31,12 @@ import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
 public class UserProxyTest {
-    /**
-     * User proxy
-     */
+
+
     @Autowired
     private UserProxy proxy;
 
-    /**
-     * User service mock bean.
-     */
+
     @MockBean
     private UserService service;
 

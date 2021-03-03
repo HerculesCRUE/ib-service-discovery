@@ -1,6 +1,6 @@
 package es.um.asio.service.solr.mapper;
 
-import com.izertis.abstractions.search.PageImplHelper;
+import es.um.asio.audit.abstractions.search.PageImplHelper;
 import es.um.asio.service.model.User;
 import es.um.asio.service.solr.model.UserSolr;
 import java.util.ArrayList;

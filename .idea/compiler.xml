@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Annotation profile for Archetype - Java JPA Rest API" enabled="true">
+      <profile name="Annotation profile for UM - ASIO - SERVICE DISCOVERY" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -21,7 +21,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/springframework/spring-context/4.0.3.RELEASE/spring-context-4.0.3.RELEASE.jar" />
           <entry name="$MAVEN_REPOSITORY$/joda-time/joda-time/2.9/joda-time-2.9.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/hibernate/hibernate-jpamodelgen/5.4.22.Final/hibernate-jpamodelgen-5.4.22.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/hibernate/hibernate-jpamodelgen/5.4.10.Final/hibernate-jpamodelgen-5.4.10.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar" />
           <entry name="$MAVEN_REPOSITORY$/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar" />
@@ -31,20 +31,29 @@
           <entry name="$MAVEN_REPOSITORY$/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar" />
           <entry name="$MAVEN_REPOSITORY$/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar" />
         </processorPath>
+        <module name="discovery-jpa-abstractions" />
         <module name="service-discovery-service" />
         <module name="service-discovery-back" />
+        <module name="service-discovery-audit" />
+        <module name="discovery-service-abstractions" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="discovery-jpa-abstractions" target="11" />
+      <module name="discovery-service-abstractions" target="11" />
       <module name="discovery-swagger" target="11" />
       <module name="service-discovery" target="11" />
+      <module name="service-discovery-audit" target="11" />
       <module name="service-discovery-back" target="11" />
       <module name="service-discovery-service" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="discovery-jpa-abstractions" options="-parameters -Amapstruct.defaultComponentModel=spring -Amapstruct.suppressGeneratorTimestamp=true -Amapstruct.suppressGeneratorVersionInfoComment=true" />
+      <module name="discovery-service-abstractions" options="-parameters -Amapstruct.defaultComponentModel=spring -Amapstruct.suppressGeneratorTimestamp=true -Amapstruct.suppressGeneratorVersionInfoComment=true" />
       <module name="discovery-swagger" options="-parameters -Amapstruct.defaultComponentModel=spring -Amapstruct.suppressGeneratorTimestamp=true -Amapstruct.suppressGeneratorVersionInfoComment=true" />
+      <module name="service-discovery-audit" options="-parameters -Amapstruct.defaultComponentModel=spring -Amapstruct.suppressGeneratorTimestamp=true -Amapstruct.suppressGeneratorVersionInfoComment=true" />
       <module name="service-discovery-back" options="-parameters -Amapstruct.defaultComponentModel=spring -Amapstruct.suppressGeneratorTimestamp=true -Amapstruct.suppressGeneratorVersionInfoComment=true" />
       <module name="service-discovery-service" options="-parameters -Amapstruct.defaultComponentModel=spring -Amapstruct.suppressGeneratorTimestamp=true -Amapstruct.suppressGeneratorVersionInfoComment=true" />
     </option>

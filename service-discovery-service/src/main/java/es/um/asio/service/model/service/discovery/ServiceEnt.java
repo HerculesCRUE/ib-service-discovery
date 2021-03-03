@@ -1,8 +1,8 @@
 package es.um.asio.service.model.service.discovery;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -44,11 +44,11 @@ public class ServiceEnt {
     @ApiModelProperty(	example="http://localhost",allowEmptyValue = false, position =2, value = "Required: The URL where the service is available", required = true)
     private String baseURL;
 
-    @Column(name = Columns.PORT,columnDefinition = "INT",updatable = true, nullable = false)
+    @Column(name = Columns.PORT,columnDefinition = "INT",updatable = true, nullable = true)
     @Min(1)
     @Max(65535)
-    @ApiModelProperty(	example="8080",allowEmptyValue = false, position =3, value = "Required: The port where the service is available", required = true)
-    private int port;
+    @ApiModelProperty(	example="8080",allowEmptyValue = false, position =3, value = "Required: The port where the service is available", required = false)
+    private Integer port;
 
     @Column(name = Columns.HEALTH_ENDPOINT,columnDefinition = "NVARCHAR(200)",updatable = true, nullable = false)
     @ApiModelProperty(	example="http://localhost",allowEmptyValue = false, position =3, value = "Required: The PATH where the service is available", required = true)
@@ -90,7 +90,7 @@ public class ServiceEnt {
         if (this.baseURL!=null) {
             sb.append(this.baseURL.endsWith("/") ? this.baseURL.substring(0, this.baseURL.length() - 1) : this.baseURL);
         }
-        if (this.port>0) {
+        if (this.port != null) {
             sb.append(String.format(":%d",this.port));
         }
         return new URL(sb.toString());
