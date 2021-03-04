@@ -64,7 +64,6 @@ public class ServiceDiscoveryController {
             @ApiParam(name = "nodeName", value = "Node name", required = true)
             @RequestParam(required = true) @Validated(Create.class) final String nodeName
     ) {
-        NodeEnt n = service.getNode(nodeName);
         return service.getNode(nodeName);
     }
 
