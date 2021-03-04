@@ -1,15 +1,11 @@
 package es.um.asio.service.model.service.discovery;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.Nullable;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
