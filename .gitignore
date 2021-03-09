@@ -29,3 +29,5 @@ hs_err_pid*
 /service-discovery-service/target/generated-test-sources/
 /target/
 /.idea/
+/.ci/
+/.github/
