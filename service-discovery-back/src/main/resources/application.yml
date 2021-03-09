@@ -21,6 +21,7 @@ app:
     base-url: http://localhost:8983/solr
     collection-name: app
 
+  check-services-status-period: 150000
 
   # CORS
   cors:

@@ -15,6 +15,7 @@ import org.jsoup.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -43,10 +44,11 @@ public class CheckHealthOfServices {
     @Autowired
     HealthRequestService healthRequestService;
 
+
     private static final Logger log = LoggerFactory.getLogger(CheckHealthOfServices.class);
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.sss");
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRateString = "${app.check-services-status-period}", initialDelay=1000)
     public void checkHealthOfServices() {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());

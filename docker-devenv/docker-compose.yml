@@ -1,11 +1,6 @@
 version: '3.1'
-<<<<<<< HEAD
-services:
-=======
-
 services:
 
->>>>>>> master
   db:
     image: mariadb:10.3
     container_name: mariadb_asio
@@ -29,11 +24,10 @@ services:
       default:
         aliases:
           - mysql.svc
-<<<<<<< HEAD
+
 volumes:
   mysql-data2:
-=======
->>>>>>> master
+
 #  solr:
 #    image: solr:7.7
 #    ports:
@@ -47,9 +41,3 @@ volumes:
 #      - start
 #      - -c
 #      - -f
-<<<<<<< HEAD
-
-=======
-volumes:
-  mysql-data2:
->>>>>>> master
