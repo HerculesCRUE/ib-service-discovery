@@ -1,4 +1,4 @@
-![](C:\Users\druiz\repositorios\UM\Formacion\ib-service-discovery\images\logos_feder.png)
+![](../images/logos_feder.png)
 
 | Entregable     | Procesador de datos                                          |
 | -------------- | ------------------------------------------------------------ |
@@ -25,9 +25,23 @@ El servicio Service Discovery, tiene dependencias con las siguientes herramienta
 
 Por lo tanto es necesario que estén configurados los parámetros de conexión a dichos componentes. Estos parámetros de conexión pueden establecerse por medio de variables de entorno tal como se indica en el fichero [README.md](https://github.com/HerculesCRUE/ib-uris-generator/blob/master/README.md#variables-de-entorno) (sección Variables de entorno).
 
-También es posible y recomendable desplegar el entorno (con las dependencias adecuadamente configuradas para su uso por la librería). Esto esta descrito en en el fichero [README.md](https://github.com/HerculesCRUE/ib-uris-generator/blob/master/README.md#entorno-de-desarrollo-docker) (sección entorno de desarrollo Docker).
+También es posible y recomendable desplegar el entorno (con las dependencias adecuadamente configuradas para su uso por la librería) mediante docker-compose
 
-Es conveniente también tener en cuenta que que la librería de descubrimiento esta diseñada para interactuar con otros componentes de la arquitectura, por lo que para su correcta utilización, componentes tales como el event processor, deben de escuchar los mensajes de cambios, emitidos por la librería e implementar las acciones, o por ejemplo el frontal, deberá de ofrecer al usuario la posibilidad de decidir si dos entidades identificadas como similares, son en realidad la misma, y por lo tanto realizar las acciones de merge que correspondan, o de desechar los cambios.
+En el directorio **docker-devenv** se ha configurado un fichero docker-compose.yml para poder arrancar el entorno de desarrollo.
+
+Para arrancar el entorno:
+
+```bash
+docker-compose up -d
+```
+
+Para pararlo:
+
+```bash
+docker-compose down
+```
+
+## 
 
 ## Despliegue de la librería
 
@@ -50,22 +64,19 @@ Para ello daremos dos opciones:
 
 Para ello tenemos que seguir los siguientes pasos:
 
-1. Descarga de binarios de la ultima release en el [repositorio de la librería](https://github.com/HerculesCRUE/ib-discovery/releases/tag/v1.2.0).
-
-   
-
-   ![jar](./img/jar.png)
+1. Descarga de binarios de la ultima release en el [repositorio de la librería](https://github.com/HerculesCRUE/ib-service-discovery/releases).
 
 
+![release](../images/release.png)
 
 2. Configurar variables de entorno (si no queremos aplicar los valores por defecto) tal como se indica en [README.md](../README.md)
 3. Ejecutar librería desde el fichero .jar descargado mediante el siguiente comando siguiente comando (desde el directorio donde se encuentra el .jar)
 
 ```bash
-java -jar discovery-back-1.2.0.jar
+java -jar service-discovery-back-2.0.0.jar
 ```
 
-3. Una vez ejecutado el jar tendremos desplegados (SERVER_PORT por defecto esta configurado a 9327):
+3. Una vez ejecutado el jar tendremos desplegados (SERVER_PORT por defecto esta configurado a 9329):
    - Aplicación discovery: http://localhost:{SERVER_PORT}
    - Swagger discovery: http://localhost:{SERVER_PORT}/swagger-ui.html
 
@@ -86,7 +97,7 @@ Para ello tenemos que seguir los siguientes pasos:
 1. Descarga de el código fuente en el repositorio del proyecto
 
    ```bash
-   git clone https://github.com/HerculesCRUE/ib-discovery.git
+   git clone https://github.com/HerculesCRUE/ib-service-discovery.git
    ```
 
 2. Compilación del proyecto con el comando 
@@ -112,7 +123,7 @@ Para ello tenemos que seguir los siguientes pasos:
 3. Ejecutar el comando
 
    ```bash
-   java -jar discovery-back-1.2.0.jar
+   java -jar service-discovery-back-2.0.0.jar
    ```
 
 4. Una vez ejecutado el jar tendremos desplegados (SERVER_PORT por defecto esta configurado a 9326):
@@ -150,8 +161,8 @@ Para ello tenemos que seguir los siguientes pasos:
 
 5. Una vez ejecutado el jar tendremos desplegados (SERVER_PORT por defecto esta configurado a 9326):
 
-   - Aplicación discovery: http://localhost:{SERVER_PORT}
-   - Swagger discovery: http://localhost:{SERVER_PORT}/swagger-ui.html
+   - Aplicación discovery-service: http://localhost:{SERVER_PORT}
+   - Swagger discovery-service: http://localhost:{SERVER_PORT}/swagger-ui.html
 
 ### Modulos
 
@@ -159,13 +170,13 @@ Para ello tenemos que seguir los siguientes pasos:
 
 Los artefactos se encuentran dentro de discovery-back/target
 
-* Artefacto: discovery-back-{version}.jar
+* Artefacto: discovery-service-back-{version}.jar
 
 #### Service
 
 Los artefactos se encuentran dentro de discovery-service/target
 
-* Artefacto: discovery-service-{version}.jar
+* Artefacto: discovery-service-back-{version}.jar
 
 #### Service Abstractions
 
@@ -177,10 +188,4 @@ Los artefactos se encuentran dentro de discovery-service-abstractions/target
 
 Los artefactos se encuentran dentro de discovery-jpa-abstractions/target
 
-* Artefacto:discoveryr-jpa-abstractions-{version}.jar
-
-#### Swagger
-
-Los artefactos se encuentran dentro dediscovery-swagger/target
-
-* Artefacto: discovery-swagger-{version}.jar
+* Artefacto: discovery-service-jpa-abstractions-{version}.jar
