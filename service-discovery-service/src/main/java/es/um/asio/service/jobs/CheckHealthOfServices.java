@@ -62,7 +62,7 @@ public class CheckHealthOfServices {
                     if (url!=null && !url.equals("")) {
                         try {
                             AbstractMap.SimpleEntry<Integer, JsonElement> response = doRequest(url, Connection.Method.GET, null, null, null);
-                            if (response.getKey() >= 200 && response.getKey() <= 399) {
+                            if ((response.getKey() >= 200 && response.getKey() <= 399) || response.getKey() == 401) {
                                 service.setStatus(Status.UP);
                                 service.getHealthRequests().add(new HealthRequest(service, Status.UP));
                             } else {
@@ -97,7 +97,7 @@ public class CheckHealthOfServices {
                 if (url!=null && !url.equals("")) {
                     try {
                         AbstractMap.SimpleEntry<Integer, JsonElement> response = doRequest(url, Connection.Method.GET, null, null, null);
-                        if (response.getKey() >= 200 && response.getKey() <= 399) {
+                        if ((response.getKey() >= 200 && response.getKey() <= 399) || response.getKey() == 401) {
                             service.setStatus(Status.UP);
                             service.getHealthRequests().add(new HealthRequest(service, Status.UP));
                         } else {

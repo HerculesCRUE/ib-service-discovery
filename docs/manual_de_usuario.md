@@ -9,7 +9,7 @@
 | Objetivo       | Módulo Service Discovery para el proyecto Backend SGI (ASIO). |
 | Estado         | Completado al **100%**                                       |
 | Próximos pasos | Si fuese necesario, registrar otros servicios en el módulo   |
-| Documentación  | [Manual de usuario](./docs/manual_de_usuario.md) (documentación de alto nivel)<br />[Documentación técnica](./docs/documentacion-tecnica.md) (documentación de bajo nivel)<br/>[Documentación API REST de la librería de descubrimiento](./docs/documentacion_api_rest_de_la_libreria_de_descubrimiento.md) (documentación de bajo nivel)<br/>[docker](./docs/docker.md) |
+| Documentación  | [Manual de usuario](./manual_de_usuario.md) (documentación de alto nivel)<br />[Documentación técnica](./documentacion-tecnica.md) (documentación de bajo nivel)<br/>[Documentación API REST de la librería de descubrimiento](./documentacion_api_rest_de_la_libreria_de_descubrimiento.md) (documentación de bajo nivel)<br/>[docker](./docker.md) |
 
 
 
@@ -17,7 +17,7 @@
 
 # Manual de usuario
 
-El presente documento realiza una descripción de el servicio **service discovery** a alto nivel, por lo tanto, se complementa con el documento de [Documentación técnica](./documentacion-tecnica.md) que la describe a bajo nivel.
+El presente documento realiza una descripción de el servicio **Service Discovery** a alto nivel, por lo tanto, se complementa con el documento de [Documentación técnica](./documentacion-tecnica.md) que la describe a bajo nivel.
 
 Este módulo tiene como principal función actuar como nodo centralizado donde los demás servicios puedan registrarse, de forma que la solución ASIO, pueda conocer la ubicación de dichos servicios en cualquier nodo y su estado.
 
