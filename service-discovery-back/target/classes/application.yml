@@ -80,7 +80,7 @@ management:
     web:
       base-path: /management
   server:
-    port: 9339
+    port: 9329
   health:
     mail:
       enabled: false
