@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class NodeServiceImp implements NodeService {
@@ -31,6 +32,31 @@ public class NodeServiceImp implements NodeService {
     @Override
     public NodeEnt getNodeByName(String name) {
         return repository.findByName(name).orElse(null);
+    }
+
+    @Override
+    public List<NodeEnt> getAllNodes(String filterByDeactivateFor) {
+        return repository.findAll().stream().filter(n -> !n.getDeactivatedFor().contains(filterByDeactivateFor)).collect(Collectors.toList());
+    }
+
+    @Override
+    public NodeEnt addDeactivate(String node, String deactivateFor) {
+        NodeEnt nodeEnt = repository.findByName(node).orElse(null);
+        if (nodeEnt!=null) {
+            nodeEnt.addDeactivate(deactivateFor);
+            save(nodeEnt);
+        }
+        return nodeEnt;
+    }
+
+    @Override
+    public NodeEnt removeDeactivate(String node, String deactivateFor) {
+        NodeEnt nodeEnt = repository.findByName(node).orElse(null);
+        if (nodeEnt!=null) {
+            nodeEnt.removeDeactivate(deactivateFor);
+            save(nodeEnt);
+        }
+        return nodeEnt;
     }
 
     // @Transactional(propagation = Propagation.REQUIRED, readOnly = false)

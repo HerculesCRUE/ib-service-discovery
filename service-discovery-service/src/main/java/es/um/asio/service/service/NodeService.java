@@ -14,6 +14,12 @@ public interface NodeService
 
     List<NodeEnt> getAllNodes();
 
+    List<NodeEnt> getAllNodes(String filterByDeactivateFor);
+
     NodeEnt getNodeByName(String name);
+
+    NodeEnt addDeactivate(String node, String deactivateFor);
+
+    NodeEnt removeDeactivate(String node, String deactivateFor);
 
 }

@@ -4,7 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,6 +43,9 @@ public class NodeEnt {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "nodeEnt", cascade = CascadeType.ALL)
     private Set<ServiceEnt> services;
 
+    @ElementCollection
+    private Set<String> deactivatedFor = new HashSet<>();
+
     public void addService(ServiceEnt serviceEnt) {
         if (this.services.contains(serviceEnt)) {
             for (ServiceEnt s : this.services) {
@@ -52,6 +57,13 @@ public class NodeEnt {
         }
     }
 
+    public void addDeactivate(String node) {
+        this.deactivatedFor.add(node);
+    }
+
+    public void removeDeactivate(String node) {
+        this.deactivatedFor.remove(node);
+    }
     /**
      * Column name constants.
      */
